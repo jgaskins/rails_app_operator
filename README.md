@@ -25,7 +25,7 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/cont
 kubectl apply -f https://github.com/jetstack/cert-manager/releases/latest/download/cert-manager.yaml
 
 # Install the RailsApp CRD
-kubectl apply -f https://github.com/jgaskins/rails_app_controller/tree/main/k8s/crd-railsapp.yaml
+kubectl apply -f https://raw.githubusercontent.com/jgaskins/rails_app_operator/main/k8s/crd-rails-app.yaml
 ```
 
 ## Usage
