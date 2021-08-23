@@ -13,6 +13,17 @@ Notes:
 
 ### Quickstart
 
+Make a Docker container for your application. This is required since Kubernetes is all about deploying containers.
+
+- [Install Docker](https://www.docker.com/products/docker-desktop) if you haven't already
+- If you don't have a Docker Hub account
+  - Create an account on [Docker Hub](https://hub.docker.com)
+  - Run `docker login` to log the Docker CLI into your Docker Hub account
+- [Create a new container repo](https://hub.docker.com/repository/create) for your app on Docker Hub
+- Copy [this `Dockerfile` into your app](https://raw.githubusercontent.com/jgaskins/rails_app_operator/main/examples/Dockerfile) if you don't have one
+- `docker build -t your-docker-hub-username/your-container-repo:latest .`
+- `docker push your-docker-hub-username/your-container-repo:latest`
+
 Run the following commands to install some of the other related operators into your cluster:
 
 ```bash
