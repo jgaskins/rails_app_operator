@@ -1,0 +1,17 @@
+name: rails_app_operator
+version: 0.1.0
+
+authors:
+  - Jamie Gaskins <jgaskins@hey.com>
+
+targets:
+  rails_app_operator:
+    main: src/rails_app_operator.cr
+
+dependencies:
+  kubernetes:
+    github: jgaskins/kubernetes
+
+crystal: 1.1.0
+
+license: MIT

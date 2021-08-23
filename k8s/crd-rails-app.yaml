@@ -1,0 +1,66 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: rails-apps.jgaskins.dev
+spec:
+  group: jgaskins.dev
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                image:
+                  type: string
+                image_pull_policy:
+                  type: string
+                  default: "IfNotPresent"
+                domain:
+                  type: string
+                env:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      value:
+                        type: string
+                web:
+                  type: object
+                  properties:
+                    command:
+                      type: array
+                      items:
+                        type: string
+                    replicas:
+                      type: integer
+                      default: 1
+                worker:
+                  type: object
+                  properties:
+                    command:
+                      type: array
+                      items:
+                        type: string
+                    replicas:
+                      type: integer
+                      default: 1
+              required:
+                - domain
+                - image
+                - env
+  scope: Namespaced
+  names:
+    plural: rails-apps
+    singular: rails-app
+    kind: RailsApp
+    shortNames: []
+      # - rails
+      # - ra

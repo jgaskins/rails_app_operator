@@ -1,0 +1,35 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: my-app
+spec:
+  finalizers:
+  - kubernetes
+---
+apiVersion: jgaskins.dev/v1
+kind: RailsApp
+metadata:
+  name: my-rails-app
+  namespace: my-app # Must match the name of the `Namespace` above
+spec:
+  image: jgaskins/k8s_rails_example:latest
+  image_pull_policy: Always
+  domain: computers.jgaskins.wtf
+  env:
+    - name: RAILS_ENV
+      value: production
+    - name: DATABASE_URL
+      value: postgres:///
+    - name: SECRET_KEY_BASE
+      value: deadbeef
+    - name: RAILS_SERVE_STATIC_FILES
+      value: "true"
+    - name: RAILS_LOG_TO_STDOUT
+      value: "true"
+    - name: RAILS_MAX_THREADS
+      value: "16"
+  web:
+    command: ["bundle", "exec", "rails", "server"]
+  worker:
+    command: ["bundle", "exec", "sidekiq"]

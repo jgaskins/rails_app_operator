@@ -1,0 +1,10 @@
+version: 2.0
+shards:
+  db:
+    git: https://github.com/crystal-lang/crystal-db.git
+    version: 0.10.1
+
+  kubernetes:
+    git: https://github.com/jgaskins/kubernetes.git
+    version: 0.1.0+git.commit.cf982c5aed61120cd8f7f1f2c9e1981e32012e6c
+
