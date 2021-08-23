@@ -60,12 +60,18 @@ metadata:
   # The kebab-case Kubernetes resource name for your Rails app
   name: my-app
   namespace: my-app-namespace # MUST match the name of the `Namespace` above
+
+# Customize these below to your specific Rails app
 spec:
+  # Change this to where your app's container is hosted. If you're on Docker Hub
+  # you don't need to supply a host.
   image: my-docker-hub-account/my-app-repo:my-tag
+
   # If you deploy from a mutable tag (such as `latest`), this needs to be
   # `Always`. If you deploy from a commit SHA or git tag, you can delete the
-  # line.
+  # line. When in doubt, just leave it as-is.
   image_pull_policy: Always
+
   # The domain you want to run your app at
   domain: example.com
   env:
