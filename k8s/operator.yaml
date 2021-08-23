@@ -13,10 +13,6 @@ metadata:
   name: rails-app-controller
   labels:
     app: rails-app-operator
-  #   app.kubernetes.io/name: cainjector
-  #   app.kubernetes.io/instance: cert-manager
-  #   app.kubernetes.io/component: "cainjector"
-  #   app.kubernetes.io/version: "v1.5.2"
 rules:
   - apiGroups: ["jgaskins.dev"]
     resources: ["rails-apps"]
@@ -46,10 +42,6 @@ metadata:
   name: rails-app-controller
   labels:
     app: rails-app-operator
-  #   app.kubernetes.io/name: cainjector
-  #   app.kubernetes.io/instance: cert-manager
-  #   app.kubernetes.io/component: "cainjector"
-  #   app.kubernetes.io/version: "v1.5.2"
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -77,7 +69,4 @@ spec:
       containers:
         - name: controller
           image: jgaskins/rails-app-operator:latest
-          # image: alpine:latest
-          # command: ["sleep", "10000"]
-          # command: ["bin/rails_app_operator"]
           imagePullPolicy: Always
