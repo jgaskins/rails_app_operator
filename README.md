@@ -35,8 +35,9 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/cont
 # Install Cert Manager (for automatically provisioning TLS certs)
 kubectl apply -f https://github.com/jetstack/cert-manager/releases/latest/download/cert-manager.yaml
 
-# Install the RailsApp CRD
+# Install the RailsApp CRD and operator deployment
 kubectl apply -f https://raw.githubusercontent.com/jgaskins/rails_app_operator/main/k8s/crd-rails-app.yaml
+kubectl apply -f https://raw.githubusercontent.com/jgaskins/rails_app_operator/main/k8s/operator.yaml
 ```
 
 ## Usage
