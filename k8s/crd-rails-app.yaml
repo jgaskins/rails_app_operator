@@ -62,5 +62,3 @@ spec:
     singular: rails-app
     kind: RailsApp
     shortNames: []
-      # - rails
-      # - ra

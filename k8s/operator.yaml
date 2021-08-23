@@ -1,0 +1,83 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: rails-app-operator
+spec:
+  finalizers:
+  - kubernetes
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: rails-app-controller
+  labels:
+    app: rails-app-operator
+  #   app.kubernetes.io/name: cainjector
+  #   app.kubernetes.io/instance: cert-manager
+  #   app.kubernetes.io/component: "cainjector"
+  #   app.kubernetes.io/version: "v1.5.2"
+rules:
+  - apiGroups: ["jgaskins.dev"]
+    resources: ["rails-apps"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "list", "create", "patch", "update", "delete"]
+  - apiGroups: [""]
+    resources: ["services"]
+    verbs: ["get", "list", "create", "patch", "update", "delete"]
+  - apiGroups: ["networking.k8s.io"]
+    resources: ["ingresses"]
+    verbs: ["get", "list", "create", "patch", "update", "delete"]
+---
+apiVersion: v1
+kind: ServiceAccount
+automountServiceAccountToken: true
+metadata:
+  name: rails-app-controller
+  namespace: "rails-app-operator"
+  labels:
+    app: rails-app-operator
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: rails-app-controller
+  labels:
+    app: rails-app-operator
+  #   app.kubernetes.io/name: cainjector
+  #   app.kubernetes.io/instance: cert-manager
+  #   app.kubernetes.io/component: "cainjector"
+  #   app.kubernetes.io/version: "v1.5.2"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: rails-app-controller
+subjects:
+  - name: rails-app-controller
+    namespace: "rails-app-operator"
+    kind: ServiceAccount
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rails-app-controller
+  namespace: rails-app-operator
+spec:
+  selector:
+    matchLabels:
+      app: rails-app-controller
+  template:
+    metadata:
+      labels:
+        app: rails-app-controller
+    spec:
+      serviceAccountName: rails-app-controller
+      containers:
+        - name: controller
+          image: jgaskins/rails-app-operator:latest
+          # image: alpine:latest
+          # command: ["sleep", "10000"]
+          # command: ["bin/rails_app_operator"]
+          imagePullPolicy: Always
