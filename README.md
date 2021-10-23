@@ -55,26 +55,28 @@ spec:
   finalizers:
   - kubernetes
 ---
-apiVersion: jgaskins.dev/v1
+apiVersion: jgaskins.dev/v1beta1
 kind: RailsApp
 metadata:
   # The kebab-case Kubernetes resource name for your Rails app
   name: my-app
-  namespace: my-app-namespace # MUST match the name of the `Namespace` above
 
-# Customize these below to your specific Rails app
+  # MUST match the name of the `Namespace` above. If you do not provide a
+  # namespace, it will install it into the `default` namespace.
+  namespace: my-app-namespace
+
+# Customize these below to your app
 spec:
   # Change this to where your app's container is hosted. If you're on Docker Hub
   # you don't need to supply a host.
   image: my-docker-hub-account/my-app-repo:my-tag
 
   # If you deploy from a mutable tag (such as `latest`), this needs to be
-  # `Always`. If you deploy from a commit SHA or git tag, you can delete the
-  # line. When in doubt, just leave it as-is.
+  # `Always`. If you deploy from tags named after commit SHAs or git tags, you
+  # can delete the line. When in doubt, just leave it as-is.
   image_pull_policy: Always
 
-  # The domain you want to run your app at
-  domain: example.com
+  # All entrypoints will have these environment variables
   env:
     - name: RAILS_ENV
       value: production
@@ -88,10 +90,33 @@ spec:
       value: "true"
     - name: RAILS_MAX_THREADS
       value: "16"
-  web:
-    command: ["bundle", "exec", "rails", "server"]
-  worker:
-    command: ["bundle", "exec", "sidekiq"]
+
+  # Set up the various processes for your app to run
+  entrypoints:
+    - name: web
+      # The command for your application to run. Must be an array, shellwords-style.
+      command: [bundle, exec, rails, server]
+      # If you supply `domain` and `port`, an Ingress resource will be created
+      domain: computers.jgaskins.wtf
+      # If you supply `port`, a Service resource will be created
+      port: 3000
+      # How many instances of this entrypoint you want to run
+      replicas: 2
+
+    # Notice the sidekiq entrypoint does not have a domain or port here. It does not
+    # need to be reachable over the network. It only makes outbound connections.
+    - name: sidekiq
+      command: [bundle, exec, sidekiq]
+
+  # The `before_create` and `before_update` hooks are invoked as Jobs before the
+  # app is deployed. They are invoked before the Deployment resource is created
+  # or updated, respectively, as indicated by their names. They are currently
+  # required. If they fail, the app will not be deployed and the jobs will need
+  # to be cleaned up manually with `kubectl`.
+  before_create:
+    command: [bundle, exec, rails, db:create, db:schema:load]
+  before_update:
+    command: [bundle, exec, rails, db:migrate]
 ```
 
 ## Development
