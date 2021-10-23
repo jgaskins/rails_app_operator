@@ -6,5 +6,5 @@ shards:
 
   kubernetes:
     git: https://github.com/jgaskins/kubernetes.git
-    version: 0.1.0+git.commit.cf982c5aed61120cd8f7f1f2c9e1981e32012e6c
+    version: 0.1.0+git.commit.ca287f46fbfff8e9ac17745afc88f04c7ddcc986
 

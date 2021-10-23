@@ -6,7 +6,7 @@ metadata:
 spec:
   group: jgaskins.dev
   versions:
-    - name: v1
+    - name: v1beta1
       served: true
       storage: true
       schema:
@@ -21,8 +21,6 @@ spec:
                 image_pull_policy:
                   type: string
                   default: "IfNotPresent"
-                domain:
-                  type: string
                 env:
                   type: array
                   items:
@@ -32,30 +30,69 @@ spec:
                         type: string
                       value:
                         type: string
-                web:
+                        nullable: true
+                      valueFrom:
+                        type: object
+                        nullable: true
+                        properties:
+                          configMapKeyRef:
+                            type: object
+                            nullable: true
+                            properties:
+                              name:
+                                type: string
+                              key:
+                                type: string
+                          secretKeyRef:
+                            type: object
+                            nullable: true
+                            properties:
+                              name:
+                                type: string
+                              key:
+                                type: string
+                entrypoints:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      command:
+                        type: array
+                        items:
+                          type: string
+                      domain:
+                        type: string
+                        nullable: true
+                      port:
+                        type: integer
+                        nullable: true
+                      replicas:
+                        type: integer
+                        default: 1
+                    required:
+                      - name
+                      - command
+                before_update:
                   type: object
                   properties:
                     command:
                       type: array
                       items:
                         type: string
-                    replicas:
-                      type: integer
-                      default: 1
-                worker:
+                before_create:
                   type: object
                   properties:
                     command:
                       type: array
                       items:
                         type: string
-                    replicas:
-                      type: integer
-                      default: 1
+
               required:
-                - domain
                 - image
                 - env
+                - entrypoints
   scope: Namespaced
   names:
     plural: rails-apps

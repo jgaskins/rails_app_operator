@@ -7,20 +7,22 @@ spec:
   finalizers:
   - kubernetes
 ---
-apiVersion: jgaskins.dev/v1
+apiVersion: jgaskins.dev/v1beta1
 kind: RailsApp
 metadata:
   name: my-rails-app
   namespace: my-app # Must match the name of the `Namespace` above
 spec:
-  image: jgaskins/k8s_rails_example:latest
+  image: quay.io/forem/forem:latest
   image_pull_policy: Always
-  domain: computers.jgaskins.wtf
   env:
+    # Rails-specific stuff
     - name: RAILS_ENV
       value: production
     - name: DATABASE_URL
-      value: postgres:///
+      value: postgres://postgres:password@postgres/forem # Installed by the Postgres operator
+    - name: REDIS_URL
+      value: redis://redis # Installed by the Redis operator
     - name: SECRET_KEY_BASE
       value: deadbeef
     - name: RAILS_SERVE_STATIC_FILES
@@ -29,7 +31,29 @@ spec:
       value: "true"
     - name: RAILS_MAX_THREADS
       value: "16"
-  web:
-    command: ["bundle", "exec", "rails", "server"]
-  worker:
-    command: ["bundle", "exec", "sidekiq"]
+    - name: LOG_LEVEL
+      value: "info"
+
+    # Forem-specific stuff
+    - name: FOREM_CREATOR_SECRET
+      value: "asdf"
+    - name: APP_PROTOCOL
+      value: "http://"
+    - name: APP_DOMAIN
+      value: "computers.jgaskins.wtf"
+    - name: COMMUNITY_NAME
+      value: "Example Forem on Kubernetes"
+
+  entrypoints:
+    - name: web
+      command: [bundle, exec, rails, server]
+      domain: computers.jgaskins.wtf
+      port: 3000
+    - name: sidekiq
+      command: [bundle, exec, sidekiq]
+
+  before_create:
+    command: [bundle, exec, rails, db:create, db:schema:load]
+
+  before_update:
+    command: [bundle, exec, rails, db:migrate]

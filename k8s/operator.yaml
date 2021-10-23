@@ -26,13 +26,16 @@ rules:
   - apiGroups: ["networking.k8s.io"]
     resources: ["ingresses"]
     verbs: ["get", "list", "create", "patch", "update", "delete"]
+  - apiGroups: ["batch"]
+    resources: ["jobs"]
+    verbs: ["get", "list", "create", "patch", "update", "delete", "watch"]
 ---
 apiVersion: v1
 kind: ServiceAccount
 automountServiceAccountToken: true
 metadata:
   name: rails-app-controller
-  namespace: "rails-app-operator"
+  namespace: rails-app-operator
   labels:
     app: rails-app-operator
 ---
@@ -48,7 +51,7 @@ roleRef:
   name: rails-app-controller
 subjects:
   - name: rails-app-controller
-    namespace: "rails-app-operator"
+    namespace: rails-app-operator
     kind: ServiceAccount
 ---
 apiVersion: apps/v1
