@@ -1,4 +1,4 @@
-FROM crystallang/crystal:1.2.0-alpine AS builder
+FROM crystallang/crystal:1.3.2-alpine AS builder
 
 COPY . /build/
 WORKDIR /build
