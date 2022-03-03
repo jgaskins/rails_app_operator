@@ -21,7 +21,7 @@ rules:
     resources: ["deployments"]
     verbs: ["get", "list", "create", "patch", "update", "delete"]
   - apiGroups: [""]
-    resources: ["services"]
+    resources: ["services", "pods"]
     verbs: ["get", "list", "create", "patch", "update", "delete"]
   - apiGroups: ["networking.k8s.io"]
     resources: ["ingresses"]
@@ -29,6 +29,9 @@ rules:
   - apiGroups: ["batch"]
     resources: ["jobs"]
     verbs: ["get", "list", "create", "patch", "update", "delete", "watch"]
+  - apiGroups: ["cert-manager.io"]
+    resources: ["certificates"]
+    verbs: ["get", "list", "create", "patch", "update", "delete"]
 ---
 apiVersion: v1
 kind: ServiceAccount
