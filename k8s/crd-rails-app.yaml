@@ -82,6 +82,22 @@ spec:
                       replicas:
                         type: integer
                         default: 1
+                      health_check:
+                        type: object
+                        nullable: true
+                        properties:
+                          path:
+                            type: string
+                            default: "/"
+                          start_after:
+                            type: integer
+                            nullable: true
+                          run_every:
+                            type: integer
+                            nullable: true
+                          failure_threshold:
+                            type: integer
+                            nullable: true
                     required:
                       - name
                       - command
