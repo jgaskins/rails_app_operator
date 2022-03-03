@@ -56,6 +56,12 @@ spec:
                                 type: string
                               key:
                                 type: string
+                          fieldRef:
+                            type: object
+                            nullable: true
+                            properties:
+                              fieldPath:
+                                type: string
                 entrypoints:
                   type: array
                   items:
