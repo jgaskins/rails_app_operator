@@ -1,6 +1,15 @@
 require "kubernetes"
 
 Kubernetes.import_crd "k8s/crd-rails-app.yaml"
+Kubernetes.define_resource(
+  name: "certificates",
+  group: "cert-manager.io",
+  type: Kubernetes::Resource(JSON::Any),
+  kind: "Certificate",
+  version: "v1",
+  prefix: "apis",
+  singular_name: "certificate",
+)
 
 # Use this one in production
 k8s = Kubernetes::Client.new
@@ -24,7 +33,16 @@ spawn do
     namespace = job.metadata.namespace
     next unless resource = k8s.rails_app(name: name, namespace: namespace)
 
-    deploy(k8s, resource.spec, job)
+    if job.status["completionTime"]? # Job is complete!
+      deploy(k8s, resource)
+
+      k8s.delete_job name: job.metadata.name, namespace: namespace
+      k8s.pods(label_selector: "job-name=#{job.metadata.name}", namespace: namespace).each do |job_pod|
+        if job_pod.status["phase"]? == "Succeeded"
+          k8s.delete_pod job_pod
+        end
+      end
+    end
   end
 end
 
@@ -37,16 +55,29 @@ k8s.watch_rails_apps(resource_version: version) do |watch|
 
   case watch
   when .added?
+    labels = {
+      rails_app:                      name,
+      "app.kubernetes.io/managed-by": "rails-app-operator",
+      "app.kubernetes.io/component":  "before-create",
+    }
     k8s.apply_job(
       metadata: {
-        name:                           "#{name}-before-create",
-        namespace:                      namespace,
-        "app.kubernetes.io/managed-by": "rails-app-operator",
-        labels:                         {rails_app: name},
+        name:      "#{name}-before-create",
+        namespace: namespace,
+        labels:    labels,
       },
       spec: {
         template: {
-          spec: {
+          metadata: {labels: labels},
+          spec:     {
+            # imagePullSecrets must be an "associative list" when used with
+            # server-side apply, which means elements must be `map`s. According
+            # to the Kubernetes reference for PodSpec objects, these maps must
+            # have a `name` key.
+            #
+            # See https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#podspec-v1-core
+            imagePullSecrets: rails_app.image_pull_secrets
+              .map { |name| {name: name} },
             containers: [
               {
                 name:            "job",
@@ -60,18 +91,26 @@ k8s.watch_rails_apps(resource_version: version) do |watch|
           },
         },
       },
+      force: true,
     )
   when .modified?
+    labels = {
+      rails_app:                      name,
+      "app.kubernetes.io/managed-by": "rails-app-operator",
+      "app.kubernetes.io/component":  "before-update",
+    }
     k8s.apply_job(
       metadata: {
-        name:                           "#{name}-before-update",
-        namespace:                      namespace,
-        "app.kubernetes.io/managed-by": "rails-app-operator",
-        labels:                         {rails_app: name},
+        name:      "#{name}-before-update",
+        namespace: namespace,
+        labels:    labels,
       },
       spec: {
         template: {
-          spec: {
+          metadata: {labels: labels},
+          spec:     {
+            imagePullSecrets: rails_app.image_pull_secrets
+              .map { |name| {name: name} },
             containers: [
               {
                 name:            "job",
@@ -85,6 +124,7 @@ k8s.watch_rails_apps(resource_version: version) do |watch|
           },
         },
       },
+      force: true,
     )
   end
 
@@ -99,102 +139,133 @@ k8s.watch_rails_apps(resource_version: version) do |watch|
   end
 end
 
-def deploy(k8s : Kubernetes::Client, rails_app : RailsApp, job : Kubernetes::Resource(Kubernetes::Job))
-  name = job.metadata.name.sub(/-before-(create|update)$/, "")
-  namespace = job.metadata.namespace
+def deploy(k8s : Kubernetes::Client, resource : Kubernetes::Resource(RailsApp))
+  rails_app = resource.spec
+  name = resource.metadata.name
+  namespace = resource.metadata.namespace
 
-  if job.status["completionTime"]? # Job is complete!
-    k8s.delete_job name: job.metadata.name, namespace: namespace
-    k8s.pods(label_selector: "job-name=#{job.metadata.name}", namespace: namespace).each do |job_pod|
-      if job_pod.status["phase"]? == "Succeeded"
-        k8s.delete_pod job_pod
-      end
-    end
+  rails_app.entrypoints.each do |entrypoint|
+    entrypoint_name = "#{name}-#{entrypoint.name}"
+    health_check = entrypoint.health_check
+    labels = {
+      app:                            entrypoint_name,
+      "app.kubernetes.io/created-by": "rails-app-operator",
+      "app.kubernetes.io/managed-by": "rails-app-operator",
+      "app.kubernetes.io/name":       entrypoint_name,
+    }
 
-    rails_app.entrypoints.each do |entrypoint|
-      entrypoint_name = "#{name}-#{entrypoint.name}"
-      k8s.apply_deployment(
+    k8s.apply_deployment(
+      metadata: {
+        name:      entrypoint_name,
+        namespace: namespace,
+        labels:    labels,
+      },
+      spec: {
+        replicas: entrypoint.replicas,
+        selector: {matchLabels: labels},
+        template: {
+          metadata: {labels: labels},
+          spec:     {
+            imagePullSecrets: rails_app.image_pull_secrets
+              .map { |name| {name: name} },
+            containers: [
+              {
+                name:            "app",
+                image:           rails_app.image,
+                imagePullPolicy: rails_app.image_pull_policy,
+                env:             rails_app.env,
+                command:         entrypoint.command,
+                ports:           if port = entrypoint.port
+                  [{containerPort: port}]
+                end,
+                livenessProbe: if (port = entrypoint.port) && health_check
+                  {
+                    httpGet:             {path: health_check.path, port: port},
+                    initialDelaySeconds: health_check.start_after,
+                    periodSeconds:       health_check.run_every,
+                    failureThreshold:    health_check.failure_threshold,
+                  }
+                end,
+                readinessProbe: if (port = entrypoint.port) && health_check
+                  {
+                    httpGet:             {path: health_check.path, port: port},
+                    initialDelaySeconds: health_check.start_after,
+                    periodSeconds:       health_check.run_every,
+                    failureThreshold:    health_check.failure_threshold,
+                  }
+                end,
+              },
+            ],
+          },
+        },
+      },
+      force: true,
+    )
+
+    if (port = entrypoint.port)
+      k8s.apply_service(
         metadata: {
           name:      entrypoint_name,
           namespace: namespace,
+          labels:    {app: name},
         },
         spec: {
-          replicas: entrypoint.replicas,
-          selector: {
-            matchLabels: {app: entrypoint_name},
-          },
-          template: {
-            metadata: {
-              labels: {app: entrypoint_name},
-            },
-            spec: {
-              containers: [
-                {
-                  name:            "app",
-                  image:           rails_app.image,
-                  imagePullPolicy: rails_app.image_pull_policy,
-                  env:             rails_app.env,
-                  command:         entrypoint.command,
-                  ports:           if port = entrypoint.port
-                    [{containerPort: port}]
-                  end,
-                  readinessProbe: if port = entrypoint.port
-                    {
-                      tcpSocket:           {port: port},
-                      initialDelaySeconds: 3,
-                      periodSeconds:       3,
-                    }
-                  end,
-                },
-              ],
-            },
-          },
+          selector: {app: entrypoint_name},
+          ports:    [{port: port}],
         },
       )
 
-      if (port = entrypoint.port)
-        k8s.apply_service(
+      if domain = entrypoint.domain
+        secret_name = "#{entrypoint_name}-tls"
+        pp k8s.apply_certificate(
+          metadata: {
+            name:      secret_name,
+            namespace: namespace,
+          },
+          spec: {
+            secretName: secret_name,
+            dnsNames:   [domain],
+            issuerRef:  {
+              name: ENV.fetch("CERT_ISSUER_NAME", "letsencrypt"),
+              kind: ENV.fetch("CERT_ISSUER_KIND", "ClusterIssuer"),
+            },
+          },
+        )
+
+        k8s.apply_ingress(
           metadata: {
             name:      entrypoint_name,
             namespace: namespace,
             labels:    {app: name},
           },
           spec: {
-            selector: {app: entrypoint_name},
-            ports:    [{port: port}],
+            tls: [
+              {
+                hosts:      [domain],
+                secretName: secret_name,
+              },
+            ],
+            rules: [
+              {
+                host: domain,
+                http: {
+                  paths: [
+                    {
+                      backend: {
+                        service: {
+                          name: entrypoint_name,
+                          port: {number: port},
+                        },
+                      },
+                      path:     "/",
+                      pathType: "Prefix",
+                    },
+                  ],
+                },
+              },
+            ],
           },
         )
-
-        if domain = entrypoint.domain
-          k8s.apply_ingress(
-            metadata: {
-              name:      entrypoint_name,
-              namespace: namespace,
-              labels:    {app: name},
-            },
-            spec: {
-              rules: [
-                {
-                  host: domain,
-                  http: {
-                    paths: [
-                      {
-                        backend: {
-                          service: {
-                            name: entrypoint_name,
-                            port: {number: port},
-                          },
-                        },
-                        path:     "/",
-                        pathType: "Prefix",
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          )
-        end
       end
     end
   end

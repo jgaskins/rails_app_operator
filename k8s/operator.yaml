@@ -62,14 +62,24 @@ kind: Deployment
 metadata:
   name: rails-app-controller
   namespace: rails-app-operator
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: rails-app
+    app.kubernetes.io/name: rails-app
 spec:
   selector:
     matchLabels:
       app: rails-app-controller
+      app.kubernetes.io/component: controller
+      app.kubernetes.io/instance: rails-app
+      app.kubernetes.io/name: rails-app
   template:
     metadata:
       labels:
         app: rails-app-controller
+        app.kubernetes.io/component: controller
+        app.kubernetes.io/instance: rails-app
+        app.kubernetes.io/name: rails-app
     spec:
       serviceAccountName: rails-app-controller
       containers:
