@@ -21,6 +21,11 @@ spec:
                 image_pull_policy:
                   type: string
                   default: "IfNotPresent"
+                image_pull_secrets:
+                  type: array
+                  default: []
+                  items:
+                    type: string
                 env:
                   type: array
                   items:
