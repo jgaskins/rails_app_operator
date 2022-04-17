@@ -85,6 +85,7 @@ k8s.watch_rails_apps(resource_version: version) do |watch|
                 imagePullPolicy: rails_app.image_pull_policy,
                 command:         rails_app.before_create.command,
                 env:             rails_app.env,
+                envFrom:         rails_app.env_from,
               },
             ],
             restartPolicy: "OnFailure",
@@ -118,6 +119,7 @@ k8s.watch_rails_apps(resource_version: version) do |watch|
                 imagePullPolicy: rails_app.image_pull_policy,
                 command:         rails_app.before_update.command,
                 env:             rails_app.env,
+                envFrom:         rails_app.env_from,
               },
             ],
             restartPolicy: "OnFailure",
@@ -173,7 +175,8 @@ def deploy(k8s : Kubernetes::Client, resource : Kubernetes::Resource(RailsApp))
                 name:            "app",
                 image:           rails_app.image,
                 imagePullPolicy: rails_app.image_pull_policy,
-                env:             rails_app.env,
+                env:             rails_app.env + entrypoint.env,
+                envFrom:         rails_app.env_from + entrypoint.env_from,
                 command:         entrypoint.command,
                 ports:           if port = entrypoint.port
                   [{containerPort: port}]
@@ -217,7 +220,7 @@ def deploy(k8s : Kubernetes::Client, resource : Kubernetes::Resource(RailsApp))
 
       if domain = entrypoint.domain
         secret_name = "#{entrypoint_name}-tls"
-        pp k8s.apply_certificate(
+        k8s.apply_certificate(
           metadata: {
             name:      secret_name,
             namespace: namespace,
@@ -234,9 +237,10 @@ def deploy(k8s : Kubernetes::Client, resource : Kubernetes::Resource(RailsApp))
 
         k8s.apply_ingress(
           metadata: {
-            name:      entrypoint_name,
-            namespace: namespace,
-            labels:    {app: name},
+            name:        entrypoint_name,
+            namespace:   namespace,
+            labels:      {app: name},
+            annotations: entrypoint.ingress.try(&.annotations),
           },
           spec: {
             tls: [
@@ -245,7 +249,8 @@ def deploy(k8s : Kubernetes::Client, resource : Kubernetes::Resource(RailsApp))
                 secretName: secret_name,
               },
             ],
-            rules: [
+            ingressClassName: ENV["INGRESS_CLASS_NAME"]? || "nginx",
+            rules:            [
               {
                 host: domain,
                 http: {

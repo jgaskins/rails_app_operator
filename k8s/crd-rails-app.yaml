@@ -26,8 +26,31 @@ spec:
                   default: []
                   items:
                     type: string
-                env:
+                envFrom: &envFrom
                   type: array
+                  default: []
+                  items:
+                    type: object
+                    properties:
+                      secretRef:
+                        type: object
+                        nullable: true
+                        properties:
+                          name:
+                            type: string
+                        required:
+                          - name
+                      configMapRef:
+                        type: object
+                        nullable: true
+                        properties:
+                          name:
+                            type: string
+                        required:
+                          - name
+                env: &env
+                  type: array
+                  default: []
                   items:
                     type: object
                     properties:
@@ -98,6 +121,16 @@ spec:
                           failure_threshold:
                             type: integer
                             nullable: true
+                      ingress:
+                        type: object
+                        nullable: true
+                        properties:
+                          annotations:
+                            type: object
+                            nullable: true
+                            x-kubernetes-preserve-unknown-fields: true
+                      envFrom: *envFrom
+                      env: *env
                     required:
                       - name
                       - command
