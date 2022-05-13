@@ -1,5 +1,98 @@
 require "kubernetes"
 
+# TODO: Upstream this into the Kubernetes shard
+module Kubernetes
+  struct ConfigMap
+    include Serializable
+
+    field api_version : String
+    field metadata : Metadata
+    field data : Hash(String, String)
+  end
+
+  define_resource(
+    type: Kubernetes::ConfigMap,
+    name: "configmap",
+    group: "",
+    version: "v1",
+    kind: "ConfigMap",
+  )
+
+  class Client
+    def apply_configmap(
+      metadata : NamedTuple,
+      data,
+      status = nil,
+      api_version : String = "v1",
+      kind : String = "ConfigMap",
+      force : Bool = false,
+      field_manager : String? = nil
+    )
+      name = metadata[:name]
+      namespace = metadata[:namespace]
+      path = "/api/#{api_version}/namespaces/#{namespace}/configmaps/#{name}"
+      params = URI::Params{
+        "force"        => force.to_s,
+        "fieldManager" => field_manager || "k8s-cr",
+      }
+      response = patch "#{path}?#{params}", {
+        apiVersion: api_version,
+        kind:       kind,
+        metadata:   metadata,
+        data:       data,
+      }
+
+      if body = response.body
+        # {{type}}.from_json response.body
+        # JSON.parse body
+        (ConfigMap | Status).from_json body
+      else
+        raise "Missing response body"
+      end
+    end
+  end
+
+  # struct PersistentVolume
+  #   include Serializable
+
+  #   field capacity : JSON::Any
+  #   field access_modes : Array(JSON::Any)
+  #   field claim_ref : JSON::Any
+  #   field persistent_volume_reclaim_policy : JSON::Any
+  #   field storage_class_name : String?
+  #   field mount_options : Array(String)?
+  #   field volume_mode : JSON::Any
+  #   field node_affinity : JSON::Any?
+  # end
+
+  # struct PersistentVolumeClaim
+  #   include Serializable
+
+  #   field access_modes : Array(JSON::Any)
+  #   field selector : JSON::Any
+  #   field resources : JSON::Any
+  #   field volume_name : String?
+  #   field storage_class_name : String?
+  #   field volume_mode : JSON::Any
+  #   field data_source : JSON::Any
+  #   field data_source_ref : JSON::Any
+  # end
+
+  # define_resource "persistentvolumes",
+  #   singular_name: "persistentvolume",
+  #   group: "",
+  #   type: Resource(PersistentVolume),
+  #   prefix: "api",
+  #   kind: "PersistentVolume"
+
+  # define_resource "persistentvolumeclaims",
+  #   singular_name: "persistentvolumeclaim",
+  #   group: "",
+  #   type: Resource(PersistentVolumeClaim),
+  #   prefix: "api",
+  #   kind: "PersistentVolumeClaim"
+end
+
 Kubernetes.import_crd "k8s/crd-rails-app.yaml"
 Kubernetes.define_resource(
   name: "certificates",
@@ -11,6 +104,23 @@ Kubernetes.define_resource(
   singular_name: "certificate",
 )
 
+module Kubernetes
+  define_resource "persistentvolumes",
+    singular_name: "persistentvolume",
+    group: "",
+    type: Resource(JSON::Any),
+    prefix: "api",
+    kind: "PersistentVolume",
+    cluster_wide: true
+
+  define_resource "persistentvolumeclaims",
+    singular_name: "persistentvolumeclaim",
+    group: "",
+    type: Resource(JSON::Any),
+    prefix: "api",
+    kind: "PersistentVolumeClaim"
+end
+
 # Use this one in production
 k8s = Kubernetes::Client.new
 
@@ -21,8 +131,8 @@ k8s = Kubernetes::Client.new
 #   certificate_file: ENV["CA_CERT"]? || "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt",
 # )
 
-result = k8s.rails_apps(namespace: nil)
-version = result.metadata.resource_version
+resources = k8s.rails_apps(namespace: nil)
+version = resources.metadata.resource_version
 
 spawn do
   k8s.watch_jobs(labels: "app.kubernetes.io/managed-by=rails-app-operator") do |watch|
@@ -54,6 +164,59 @@ k8s.watch_rails_apps(resource_version: version) do |watch|
   namespace = resource.metadata.namespace
 
   case watch
+  when .added?, .modified?
+    rails_app.directories.each do |dir|
+      if files = dir.files
+        k8s.apply_configmap(
+          metadata: {
+            name:      "#{name}-#{dir.name}",
+            namespace: namespace,
+          },
+          data: files.each_with_object({} of String => String) { |file, hash|
+            hash[file.filename] = file.content
+          },
+          force: true,
+        )
+      elsif storage = dir.persistent_storage
+        k8s.apply_persistentvolumeclaim(
+          metadata: {
+            namespace: namespace,
+            name:      "#{name}-#{dir.name}",
+            # Do we need to set this?
+            # finalizers: %w[
+            #   kubernetes.io/pv-protection
+            # ],
+          },
+          spec: {
+            accessModes:      storage.access_modes,
+            storageClassName: storage.storage_class,
+            resources:        {
+              requests: {
+                storage: storage.size,
+              },
+            },
+          },
+        )
+      end
+    end
+  when .deleted?
+    rails_app.directories.each do |dir|
+      dir_resource_name = "#{name}-#{dir.name}"
+      if dir.files
+        k8s.delete_configmap(namespace: namespace, name: dir_resource_name)
+      elsif dir.persistent_storage
+        k8s.delete_persistentvolumeclaim(namespace: namespace, name: dir_resource_name)
+      end
+    rescue ex
+      Log.for("rails-app-operator").error { ex }
+      ex.backtrace?.try(&.each do |line|
+        Log.for("rails-app-operator").error { line }
+      end)
+      raise ex
+    end
+  end
+
+  case watch
   when .added?
     labels = {
       rails_app:                      name,
@@ -69,27 +232,9 @@ k8s.watch_rails_apps(resource_version: version) do |watch|
       spec: {
         template: {
           metadata: {labels: labels},
-          spec:     {
-            # imagePullSecrets must be an "associative list" when used with
-            # server-side apply, which means elements must be `map`s. According
-            # to the Kubernetes reference for PodSpec objects, these maps must
-            # have a `name` key.
-            #
-            # See https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#podspec-v1-core
-            imagePullSecrets: rails_app.image_pull_secrets
-              .map { |name| {name: name} },
-            containers: [
-              {
-                name:            "job",
-                image:           rails_app.image,
-                imagePullPolicy: rails_app.image_pull_policy,
-                command:         rails_app.before_create.command,
-                env:             rails_app.env,
-                envFrom:         rails_app.env_from,
-              },
-            ],
+          spec:     pod_spec(resource, command: rails_app.before_create.command).merge({
             restartPolicy: "OnFailure",
-          },
+          }),
         },
       },
       force: true,
@@ -109,21 +254,9 @@ k8s.watch_rails_apps(resource_version: version) do |watch|
       spec: {
         template: {
           metadata: {labels: labels},
-          spec:     {
-            imagePullSecrets: rails_app.image_pull_secrets
-              .map { |name| {name: name} },
-            containers: [
-              {
-                name:            "job",
-                image:           rails_app.image,
-                imagePullPolicy: rails_app.image_pull_policy,
-                command:         rails_app.before_update.command,
-                env:             rails_app.env,
-                envFrom:         rails_app.env_from,
-              },
-            ],
+          spec:     pod_spec(resource, command: rails_app.before_update.command).merge({
             restartPolicy: "OnFailure",
-          },
+          }),
         },
       },
       force: true,
@@ -148,7 +281,6 @@ def deploy(k8s : Kubernetes::Client, resource : Kubernetes::Resource(RailsApp))
 
   rails_app.entrypoints.each do |entrypoint|
     entrypoint_name = "#{name}-#{entrypoint.name}"
-    health_check = entrypoint.health_check
     labels = {
       app:                            entrypoint_name,
       "app.kubernetes.io/created-by": "rails-app-operator",
@@ -167,39 +299,7 @@ def deploy(k8s : Kubernetes::Client, resource : Kubernetes::Resource(RailsApp))
         selector: {matchLabels: labels},
         template: {
           metadata: {labels: labels},
-          spec:     {
-            imagePullSecrets: rails_app.image_pull_secrets
-              .map { |name| {name: name} },
-            containers: [
-              {
-                name:            "app",
-                image:           rails_app.image,
-                imagePullPolicy: rails_app.image_pull_policy,
-                env:             rails_app.env + entrypoint.env,
-                envFrom:         rails_app.env_from + entrypoint.env_from,
-                command:         entrypoint.command,
-                ports:           if port = entrypoint.port
-                  [{containerPort: port}]
-                end,
-                livenessProbe: if (port = entrypoint.port) && health_check
-                  {
-                    httpGet:             {path: health_check.path, port: port},
-                    initialDelaySeconds: health_check.start_after,
-                    periodSeconds:       health_check.run_every,
-                    failureThreshold:    health_check.failure_threshold,
-                  }
-                end,
-                readinessProbe: if (port = entrypoint.port) && health_check
-                  {
-                    httpGet:             {path: health_check.path, port: port},
-                    initialDelaySeconds: health_check.start_after,
-                    periodSeconds:       health_check.run_every,
-                    failureThreshold:    health_check.failure_threshold,
-                  }
-                end,
-              },
-            ],
-          },
+          spec:     pod_spec(resource, entrypoint: entrypoint),
         },
       },
       force: true,
@@ -262,8 +362,8 @@ def deploy(k8s : Kubernetes::Client, resource : Kubernetes::Resource(RailsApp))
                           port: {number: port},
                         },
                       },
-                      path:     "/",
-                      pathType: "Prefix",
+                      path:     entrypoint.path,
+                      pathType: entrypoint.path_type,
                     },
                   ],
                 },
@@ -274,4 +374,74 @@ def deploy(k8s : Kubernetes::Client, resource : Kubernetes::Resource(RailsApp))
       end
     end
   end
+end
+
+def pod_spec(
+  resource : Kubernetes::Resource(RailsApp),
+  *,
+  entrypoint : RailsApp::Entrypoints? = nil,
+  command : Array(String)? = entrypoint.try(&.command),
+)
+  name = resource.metadata.name
+  namespace = resource.metadata.namespace
+  rails_app = resource.spec
+
+  env = rails_app.env
+  env_from = rails_app.env_from
+  container_spec = {
+    name:            "app",
+    image:           rails_app.image,
+    imagePullPolicy: rails_app.image_pull_policy,
+    env:             env
+      # Ensure that env vars in the entrypoint override ones defined
+      # on the rails_app. We can't allow duplicate entries.
+      .uniq(&.name),
+    envFrom:      env_from,
+    command:      command,
+    volumeMounts: rails_app.directories.map { |dir|
+      {name: "#{name}-#{dir.name}", mountPath: dir.path}
+    },
+  }
+  if entrypoint
+    health_check = entrypoint.health_check
+    env += entrypoint.env
+    env_from += entrypoint.env_from
+    container_spec = container_spec.merge({
+      ports: if port = entrypoint.port
+        [{containerPort: port}]
+      end,
+      resources:    entrypoint.resources,
+      livenessProbe: if (port = entrypoint.port) && health_check
+        {
+          httpGet:             {path: health_check.path, port: port},
+          initialDelaySeconds: health_check.start_after,
+          periodSeconds:       health_check.run_every,
+          failureThreshold:    health_check.failure_threshold,
+        }
+      end,
+      readinessProbe: if (port = entrypoint.port) && health_check
+        {
+          httpGet:             {path: health_check.path, port: port},
+          initialDelaySeconds: health_check.start_after,
+          periodSeconds:       health_check.run_every,
+          failureThreshold:    health_check.failure_threshold,
+        }
+      end,
+    })
+  end
+
+  {
+    serviceAccountName: entrypoint.try(&.service_account) || rails_app.service_account,
+    imagePullSecrets:   rails_app.image_pull_secrets
+      .map { |name| {name: name} },
+    containers: {container_spec},
+    volumes:    rails_app.directories.map { |dir|
+      n = "#{name}-#{dir.name}"
+      if files = dir.files
+        {name: n, configMap: {name: n}}
+      elsif storage = dir.persistent_storage
+        {name: n, persistentVolumeClaim: {claimName: n}}
+      end
+    },
+  }
 end

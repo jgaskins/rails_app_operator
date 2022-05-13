@@ -85,6 +85,48 @@ spec:
                             properties:
                               fieldPath:
                                 type: string
+                directories:
+                  type: array
+                  default: []
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      path:
+                        type: string
+                      files:
+                        type: array
+                        nullable: true
+                        items:
+                          type: object
+                          properties:
+                            filename:
+                              type: string
+                            content:
+                              type: string
+                        required:
+                          - filename
+                          - content
+                      persistent_storage:
+                        type: object
+                        nullable: true
+                        properties:
+                          access_modes:
+                            type: array
+                            items:
+                              type: string
+                          storage_class:
+                            type: string
+                            nullable: true
+                          size:
+                            type: string
+                        required:
+                          - access_modes
+                          - size
+                    required:
+                      - name
+                      - path
                 entrypoints:
                   type: array
                   items:
@@ -94,6 +136,7 @@ spec:
                         type: string
                       command:
                         type: array
+                        nullable: true
                         items:
                           type: string
                       domain:
@@ -102,9 +145,26 @@ spec:
                       port:
                         type: integer
                         nullable: true
+                      path:
+                        type: string
+                        default: "/"
+                      path_type:
+                        type: string
+                        default: "Prefix"
                       replicas:
                         type: integer
                         default: 1
+                      resources:
+                        type: object
+                        nullable: true
+                        properties:
+                          requests: &resources
+                            type: object
+                            nullable: true
+                            properties:
+                              cpu: { type: string }
+                              memory: { type: string }
+                          limits: *resources
                       health_check:
                         type: object
                         nullable: true
@@ -131,9 +191,11 @@ spec:
                             x-kubernetes-preserve-unknown-fields: true
                       envFrom: *envFrom
                       env: *env
+                      service_account:
+                        type: string
+                        nullable: true
                     required:
                       - name
-                      - command
                 before_update:
                   type: object
                   properties:
@@ -148,6 +210,9 @@ spec:
                       type: array
                       items:
                         type: string
+                service_account:
+                  type: string
+                  nullable: true
 
               required:
                 - image
