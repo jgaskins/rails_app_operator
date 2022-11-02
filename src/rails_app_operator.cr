@@ -1,4 +1,8 @@
 require "kubernetes"
+require "log"
+
+LOG = Log.for("rails-app-operator")
+Log.setup_from_env
 
 # TODO: Upstream this into the Kubernetes shard
 module Kubernetes
@@ -146,10 +150,10 @@ spawn do
     if job.status["completionTime"]? # Job is complete!
       deploy(k8s, resource)
 
-      k8s.delete_job name: job.metadata.name, namespace: namespace
+      info k8s.delete_job name: job.metadata.name, namespace: namespace
       k8s.pods(label_selector: "job-name=#{job.metadata.name}", namespace: namespace).each do |job_pod|
         if job_pod.status["phase"]? == "Succeeded"
-          k8s.delete_pod job_pod
+          info k8s.delete_pod job_pod
         end
       end
     end
@@ -167,7 +171,7 @@ k8s.watch_rails_apps(resource_version: version) do |watch|
   when .added?, .modified?
     rails_app.directories.each do |dir|
       if files = dir.files
-        k8s.apply_configmap(
+        info k8s.apply_configmap(
           metadata: {
             name:      "#{name}-#{dir.name}",
             namespace: namespace,
@@ -178,7 +182,7 @@ k8s.watch_rails_apps(resource_version: version) do |watch|
           force: true,
         )
       elsif storage = dir.persistent_storage
-        k8s.apply_persistentvolumeclaim(
+        info k8s.apply_persistentvolumeclaim(
           metadata: {
             namespace: namespace,
             name:      "#{name}-#{dir.name}",
@@ -203,15 +207,13 @@ k8s.watch_rails_apps(resource_version: version) do |watch|
     rails_app.directories.each do |dir|
       dir_resource_name = "#{name}-#{dir.name}"
       if dir.files
-        k8s.delete_configmap(namespace: namespace, name: dir_resource_name)
+        info k8s.delete_configmap(namespace: namespace, name: dir_resource_name)
       elsif dir.persistent_storage
-        k8s.delete_persistentvolumeclaim(namespace: namespace, name: dir_resource_name)
+        info k8s.delete_persistentvolumeclaim(namespace: namespace, name: dir_resource_name)
       end
     rescue ex
-      Log.for("rails-app-operator").error { ex }
-      ex.backtrace?.try(&.each do |line|
-        Log.for("rails-app-operator").error { line }
-      end)
+      error ex
+      ex.backtrace?.try(&.each { |line| error line })
       raise ex
     end
   end
@@ -223,7 +225,7 @@ k8s.watch_rails_apps(resource_version: version) do |watch|
       "app.kubernetes.io/managed-by": "rails-app-operator",
       "app.kubernetes.io/component":  "before-create",
     }
-    k8s.apply_job(
+    info k8s.apply_job(
       metadata: {
         name:      "#{name}-before-create",
         namespace: namespace,
@@ -245,7 +247,7 @@ k8s.watch_rails_apps(resource_version: version) do |watch|
       "app.kubernetes.io/managed-by": "rails-app-operator",
       "app.kubernetes.io/component":  "before-update",
     }
-    k8s.apply_job(
+    info k8s.apply_job(
       metadata: {
         name:      "#{name}-before-update",
         namespace: namespace,
@@ -267,10 +269,12 @@ k8s.watch_rails_apps(resource_version: version) do |watch|
   when .deleted?
     rails_app.entrypoints.each do |entrypoint|
       entrypoint_name = "#{name}-#{entrypoint.name}"
-      k8s.delete_deployment name: entrypoint_name, namespace: namespace
-      k8s.delete_service name: entrypoint_name, namespace: namespace
-      k8s.delete_ingress name: entrypoint_name, namespace: namespace
+      info k8s.delete_deployment name: entrypoint_name, namespace: namespace
+      info k8s.delete_service name: entrypoint_name, namespace: namespace
+      info k8s.delete_ingress name: entrypoint_name, namespace: namespace
     end
+    info k8s.delete_job name: "#{name}-before-create", namespace: namespace
+    info k8s.delete_job name: "#{name}-before-update", namespace: namespace
   end
 end
 
@@ -288,7 +292,7 @@ def deploy(k8s : Kubernetes::Client, resource : Kubernetes::Resource(RailsApp))
       "app.kubernetes.io/name":       entrypoint_name,
     }
 
-    k8s.apply_deployment(
+    info k8s.apply_deployment(
       metadata: {
         name:      entrypoint_name,
         namespace: namespace,
@@ -306,7 +310,7 @@ def deploy(k8s : Kubernetes::Client, resource : Kubernetes::Resource(RailsApp))
     )
 
     if (port = entrypoint.port)
-      k8s.apply_service(
+      info k8s.apply_service(
         metadata: {
           name:      entrypoint_name,
           namespace: namespace,
@@ -320,7 +324,7 @@ def deploy(k8s : Kubernetes::Client, resource : Kubernetes::Resource(RailsApp))
 
       if domain = entrypoint.domain
         secret_name = "#{entrypoint_name}-tls"
-        k8s.apply_certificate(
+        info k8s.apply_certificate(
           metadata: {
             name:      secret_name,
             namespace: namespace,
@@ -335,7 +339,7 @@ def deploy(k8s : Kubernetes::Client, resource : Kubernetes::Resource(RailsApp))
           },
         )
 
-        k8s.apply_ingress(
+        info k8s.apply_ingress(
           metadata: {
             name:        entrypoint_name,
             namespace:   namespace,
@@ -410,7 +414,7 @@ def pod_spec(
       ports: if port = entrypoint.port
         [{containerPort: port}]
       end,
-      resources:    entrypoint.resources,
+      resources:     entrypoint.resources,
       livenessProbe: if (port = entrypoint.port) && health_check
         {
           httpGet:             {path: health_check.path, port: port},
@@ -444,4 +448,12 @@ def pod_spec(
       end
     },
   }
+end
+
+def info(result)
+  LOG.info { result }
+end
+
+def error(result)
+  LOG.error { result }
 end
