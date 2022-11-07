@@ -203,6 +203,8 @@ spec:
                       type: array
                       items:
                         type: string
+                    env: *env
+                    envFrom: *envFrom
                 before_create:
                   type: object
                   properties:
@@ -210,6 +212,8 @@ spec:
                       type: array
                       items:
                         type: string
+                    env: *env
+                    envFrom: *envFrom
                 service_account:
                   type: string
                   nullable: true

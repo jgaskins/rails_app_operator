@@ -234,7 +234,12 @@ k8s.watch_rails_apps(resource_version: version) do |watch|
       spec: {
         template: {
           metadata: {labels: labels},
-          spec:     pod_spec(resource, command: rails_app.before_create.command).merge({
+          spec:     pod_spec(
+            resource,
+            command: rails_app.before_create.command,
+            env: rails_app.before_create.env,
+            env_from: rails_app.before_create.env_from,
+          ).merge({
             restartPolicy: "OnFailure",
           }),
         },
@@ -256,7 +261,12 @@ k8s.watch_rails_apps(resource_version: version) do |watch|
       spec: {
         template: {
           metadata: {labels: labels},
-          spec:     pod_spec(resource, command: rails_app.before_update.command).merge({
+          spec:     pod_spec(
+            resource,
+            command: rails_app.before_update.command,
+            env: rails_app.before_update.env,
+            env_from: rails_app.before_update.env_from,
+          ).merge({
             restartPolicy: "OnFailure",
           }),
         },
@@ -385,13 +395,15 @@ def pod_spec(
   *,
   entrypoint : RailsApp::Entrypoints? = nil,
   command : Array(String)? = entrypoint.try(&.command),
+  env : Array = [] of RailsApp::Entrypoints::Env,
+  env_from : Array = [] of RailsApp::Entrypoints::EnvFrom
 )
   name = resource.metadata.name
   namespace = resource.metadata.namespace
   rails_app = resource.spec
 
-  env = rails_app.env
-  env_from = rails_app.env_from
+  env = rails_app.env + env
+  env_from = rails_app.env_from + env_from
   container_spec = {
     name:            "app",
     image:           rails_app.image,
@@ -411,9 +423,9 @@ def pod_spec(
     env += entrypoint.env
     env_from += entrypoint.env_from
     container_spec = container_spec.merge({
-      env: env,
-      envFrom: env_from,
-      ports: if port = entrypoint.port
+      env:      env,
+      env_from: env_from,
+      ports:    if port = entrypoint.port
         [{containerPort: port}]
       end,
       resources:     entrypoint.resources,
