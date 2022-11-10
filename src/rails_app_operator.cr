@@ -423,9 +423,9 @@ def pod_spec(
     env += entrypoint.env
     env_from += entrypoint.env_from
     container_spec = container_spec.merge({
-      env:      env,
+      env:     env,
       envFrom: env_from,
-      ports:    if port = entrypoint.port
+      ports:   if port = entrypoint.port
         [{containerPort: port}]
       end,
       resources:     entrypoint.resources,
