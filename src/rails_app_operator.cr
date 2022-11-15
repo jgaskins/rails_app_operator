@@ -438,7 +438,7 @@ def pod_spec(
       end,
     })
   end
-  container_spec = pp container_spec.merge({
+  container_spec = container_spec.merge({
     env: (env + rails_app.env).uniq(&.name.strip),
     envFrom: env_from + rails_app.env_from,
   })
