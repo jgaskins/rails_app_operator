@@ -402,17 +402,10 @@ def pod_spec(
   namespace = resource.metadata.namespace
   rails_app = resource.spec
 
-  env = rails_app.env + env
-  env_from = rails_app.env_from + env_from
   container_spec = {
     name:            "app",
     image:           rails_app.image,
     imagePullPolicy: rails_app.image_pull_policy,
-    env:             env
-      # Ensure that env vars in the entrypoint override ones defined
-      # on the rails_app. We can't allow duplicate entries.
-      .uniq(&.name),
-    envFrom:      env_from,
     command:      command,
     volumeMounts: rails_app.directories.map { |dir|
       {name: "#{name}-#{dir.name}", mountPath: dir.path}
@@ -423,8 +416,6 @@ def pod_spec(
     env += entrypoint.env
     env_from += entrypoint.env_from
     container_spec = container_spec.merge({
-      env:     env,
-      envFrom: env_from,
       ports:   if port = entrypoint.port
         [{containerPort: port}]
       end,
@@ -447,6 +438,10 @@ def pod_spec(
       end,
     })
   end
+  container_spec = container_spec.merge({
+    env: (env + rails_app.env).uniq(&.name),
+    envFrom: env_from + rails_app.env_from,
+  })
 
   {
     serviceAccountName: entrypoint.try(&.service_account) || rails_app.service_account,
