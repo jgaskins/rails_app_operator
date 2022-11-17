@@ -218,8 +218,8 @@ k8s.watch_rails_apps(resource_version: version) do |watch|
     end
   end
 
-  case watch
-  when .added?
+  # TODO: Extract the bodies of this into a single method
+  if watch.added? && watch.resource.metadata.creation_timestamp > 1.minute.ago
     labels = {
       rails_app:                      name,
       "app.kubernetes.io/managed-by": "rails-app-operator",
@@ -246,7 +246,9 @@ k8s.watch_rails_apps(resource_version: version) do |watch|
       },
       force: true,
     )
-  when .modified?
+  elsif watch.deleted?
+    # do nothing here
+  else # Updated or the K8s control plane telling us it's added but it's really just an update
     labels = {
       rails_app:                      name,
       "app.kubernetes.io/managed-by": "rails-app-operator",
@@ -406,8 +408,8 @@ def pod_spec(
     name:            "app",
     image:           rails_app.image,
     imagePullPolicy: rails_app.image_pull_policy,
-    command:      command,
-    volumeMounts: rails_app.directories.map { |dir|
+    command:         command,
+    volumeMounts:    rails_app.directories.map { |dir|
       {name: "#{name}-#{dir.name}", mountPath: dir.path}
     },
   }
@@ -416,7 +418,7 @@ def pod_spec(
     env += entrypoint.env
     env_from += entrypoint.env_from
     container_spec = container_spec.merge({
-      ports:   if port = entrypoint.port
+      ports: if port = entrypoint.port
         [{containerPort: port}]
       end,
       resources:     entrypoint.resources,
@@ -439,7 +441,7 @@ def pod_spec(
     })
   end
   container_spec = container_spec.merge({
-    env: (env + rails_app.env).uniq(&.name.strip),
+    env:     (env + rails_app.env).uniq(&.name.strip),
     envFrom: env_from + rails_app.env_from,
   })
 
