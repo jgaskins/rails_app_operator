@@ -219,7 +219,7 @@ k8s.watch_rails_apps(resource_version: version) do |watch|
   end
 
   # TODO: Extract the bodies of this into a single method
-  if watch.added? && watch.resource.metadata.creation_timestamp > 1.minute.ago
+  if watch.added? && resource.metadata.creation_timestamp > 1.minute.ago
     labels = {
       rails_app:                      name,
       "app.kubernetes.io/managed-by": "rails-app-operator",
