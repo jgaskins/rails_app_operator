@@ -162,8 +162,12 @@ spec:
                             type: object
                             nullable: true
                             properties:
-                              cpu: { type: string }
-                              memory: { type: string }
+                              cpu:
+                                type: string
+                                nullable: true
+                              memory:
+                                type: string
+                                nullable: true
                           limits: *resources
                       health_check:
                         type: object
