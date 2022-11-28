@@ -150,12 +150,7 @@ spawn do
     if job.status["completionTime"]? # Job is complete!
       deploy(k8s, resource)
 
-      info k8s.delete_job name: job.metadata.name, namespace: namespace
-      k8s.pods(label_selector: "job-name=#{job.metadata.name}", namespace: namespace).each do |job_pod|
-        if job_pod.status["phase"]? == "Succeeded"
-          info k8s.delete_pod job_pod
-        end
-      end
+      delete_job k8s, job
     end
   end
 end
@@ -225,8 +220,8 @@ k8s.watch_rails_apps(resource_version: version) do |watch|
       "app.kubernetes.io/managed-by": "rails-app-operator",
       "app.kubernetes.io/component":  "before-create",
     }
-    info k8s.delete_job namespace: namespace, name: "#{name}-before-create"
-    info k8s.delete_job namespace: namespace, name: "#{name}-before-update"
+    delete_job k8s, namespace: namespace, name: "#{name}-before-create"
+    delete_job k8s, namespace: namespace, name: "#{name}-before-update"
     info k8s.apply_job(
       metadata: {
         name:      "#{name}-before-create",
@@ -256,8 +251,8 @@ k8s.watch_rails_apps(resource_version: version) do |watch|
       "app.kubernetes.io/managed-by": "rails-app-operator",
       "app.kubernetes.io/component":  "before-update",
     }
-    info k8s.delete_job namespace: namespace, name: "#{name}-before-create"
-    info k8s.delete_job namespace: namespace, name: "#{name}-before-update"
+    delete_job k8s, namespace: namespace, name: "#{name}-before-create"
+    delete_job k8s, namespace: namespace, name: "#{name}-before-update"
     info k8s.apply_job(
       metadata: {
         name:      "#{name}-before-update",
@@ -471,4 +466,21 @@ end
 
 def error(result)
   LOG.error { result }
+end
+
+def delete_job(k8s, namespace : String, name : String)
+  if job = k8s.job(namespace: namespace, name: name)
+    delete_job k8s, job
+  else
+    LOG.info { "No job to delete: #{namespace}/#{name}" }
+  end
+end
+
+def delete_job(k8s, job)
+  info k8s.delete_job name: job.metadata.name, namespace: job.metadata.namespace
+  k8s.pods(label_selector: "job-name=#{job.metadata.name}", namespace: job.metadata.namespace).each do |job_pod|
+    if job_pod.status["phase"]? == "Succeeded"
+      info k8s.delete_pod job_pod
+    end
+  end
 end
