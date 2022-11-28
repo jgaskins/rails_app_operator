@@ -225,6 +225,8 @@ k8s.watch_rails_apps(resource_version: version) do |watch|
       "app.kubernetes.io/managed-by": "rails-app-operator",
       "app.kubernetes.io/component":  "before-create",
     }
+    info k8s.delete_job namespace: namespace, name: "#{name}-before-create"
+    info k8s.delete_job namespace: namespace, name: "#{name}-before-update"
     info k8s.apply_job(
       metadata: {
         name:      "#{name}-before-create",
@@ -254,6 +256,8 @@ k8s.watch_rails_apps(resource_version: version) do |watch|
       "app.kubernetes.io/managed-by": "rails-app-operator",
       "app.kubernetes.io/component":  "before-update",
     }
+    info k8s.delete_job namespace: namespace, name: "#{name}-before-create"
+    info k8s.delete_job namespace: namespace, name: "#{name}-before-update"
     info k8s.apply_job(
       metadata: {
         name:      "#{name}-before-update",
