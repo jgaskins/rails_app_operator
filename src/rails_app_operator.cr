@@ -161,6 +161,7 @@ k8s.watch_rails_apps(resource_version: version) do |watch|
   rails_app = resource.spec
   name = resource.metadata.name
   namespace = resource.metadata.namespace
+  version = resource.metadata.resource_version
 
   case watch
   when .added?, .modified?
