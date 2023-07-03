@@ -4,6 +4,11 @@ require "log"
 LOG = Log.for("rails-app-operator")
 Log.setup_from_env
 
+spawn do
+  sleep 1.hour
+  exit
+end
+
 # TODO: Upstream this into the Kubernetes shard
 module Kubernetes
   struct ConfigMap
