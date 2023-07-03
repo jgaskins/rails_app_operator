@@ -85,6 +85,10 @@ spec:
                             properties:
                               fieldPath:
                                 type: string
+                node_selector: &node_selector
+                  type: object
+                  default: {}
+                  x-kubernetes-preserve-unknown-fields: true
                 directories:
                   type: array
                   default: []
@@ -169,6 +173,7 @@ spec:
                                 type: string
                                 nullable: true
                           limits: *resources
+                      node_selector: *node_selector
                       health_check:
                         type: object
                         nullable: true
@@ -209,6 +214,7 @@ spec:
                         type: string
                     env: *env
                     envFrom: *envFrom
+                    node_selector: *node_selector
                 before_create:
                   type: object
                   properties:
@@ -218,6 +224,7 @@ spec:
                         type: string
                     env: *env
                     envFrom: *envFrom
+                    node_selector: *node_selector
                 service_account:
                   type: string
                   nullable: true

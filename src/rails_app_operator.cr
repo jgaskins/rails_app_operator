@@ -237,6 +237,7 @@ k8s.watch_rails_apps(resource_version: version) do |watch|
             command: rails_app.before_create.command,
             env: rails_app.before_create.env,
             env_from: rails_app.before_create.env_from,
+            node_selector: rails_app.node_selector.merge(rails_app.before_create.node_selector),
           ).merge({
             restartPolicy: "OnFailure",
           }),
@@ -268,6 +269,7 @@ k8s.watch_rails_apps(resource_version: version) do |watch|
             command: rails_app.before_update.command,
             env: rails_app.before_update.env,
             env_from: rails_app.before_update.env_from,
+            node_selector: rails_app.node_selector.merge(rails_app.before_update.node_selector),
           ).merge({
             restartPolicy: "OnFailure",
           }),
@@ -398,7 +400,8 @@ def pod_spec(
   entrypoint : RailsApp::Entrypoints? = nil,
   command : Array(String)? = entrypoint.try(&.command),
   env : Array = [] of RailsApp::Entrypoints::Env,
-  env_from : Array = [] of RailsApp::Entrypoints::EnvFrom
+  env_from : Array = [] of RailsApp::Entrypoints::EnvFrom,
+  node_selector = {} of String => JSON::Any
 )
   name = resource.metadata.name
   namespace = resource.metadata.namespace
@@ -417,6 +420,7 @@ def pod_spec(
     health_check = entrypoint.health_check
     env += entrypoint.env
     env_from += entrypoint.env_from
+    node_selector = node_selector.merge(entrypoint.node_selector)
     container_spec = container_spec.merge({
       ports: if port = entrypoint.port
         [{containerPort: port}]
@@ -449,8 +453,9 @@ def pod_spec(
     serviceAccountName: entrypoint.try(&.service_account) || rails_app.service_account,
     imagePullSecrets:   rails_app.image_pull_secrets
       .map { |name| {name: name} },
-    containers: {container_spec},
-    volumes:    rails_app.directories.map { |dir|
+    containers:   {container_spec},
+    nodeSelector: rails_app.node_selector.merge(node_selector),
+    volumes:      rails_app.directories.map { |dir|
       n = "#{name}-#{dir.name}"
       if files = dir.files
         {name: n, configMap: {name: n}}
