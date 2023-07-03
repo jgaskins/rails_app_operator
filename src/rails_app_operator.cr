@@ -148,20 +148,28 @@ spawn do
     job = watch.object
     next unless job.metadata.labels["rails_app"]?
 
-    name = job.metadata.name.sub(/-before-(create|update)$/, "")
-    namespace = job.metadata.namespace
-    next unless resource = k8s.rails_app(name: name, namespace: namespace)
+    case watch
+    when .added?, .modified?
+      name = job.metadata.name.sub(/-before-(create|update)$/, "")
+      namespace = job.metadata.namespace
+      next unless resource = k8s.rails_app(name: name, namespace: namespace)
 
-    if job.status["completionTime"]? # Job is complete!
-      deploy(k8s, resource)
+      if job.status["completionTime"]? # Job is complete!
+        deploy(k8s, resource)
 
-      delete_job k8s, job
+        delete_job k8s, job
+      end
+    when .deleted?
+      delete_job_pods k8s, job
+    when .error?
+      LOG.error { watch.to_json }
     end
   end
 end
 
-puts "Watching Rails Apps..."
+info "Watching Rails Apps"
 k8s.watch_rails_apps(resource_version: version) do |watch|
+  info watch
   resource = watch.object
   rails_app = resource.spec
   name = resource.metadata.name
@@ -322,7 +330,10 @@ def deploy(k8s : Kubernetes::Client, resource : Kubernetes::Resource(RailsApp))
         selector: {matchLabels: labels},
         template: {
           metadata: {labels: labels},
-          spec:     pod_spec(resource, entrypoint: entrypoint),
+          spec:     pod_spec(
+            resource,
+            entrypoint: entrypoint,
+          ),
         },
       },
       force: true,
@@ -489,6 +500,10 @@ end
 
 def delete_job(k8s, job)
   info k8s.delete_job name: job.metadata.name, namespace: job.metadata.namespace
+  delete_job_pods k8s, job
+end
+
+def delete_job_pods(k8s, job)
   k8s.pods(label_selector: "job-name=#{job.metadata.name}", namespace: job.metadata.namespace).each do |job_pod|
     if job_pod.status["phase"]? == "Succeeded"
       info k8s.delete_pod job_pod
