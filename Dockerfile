@@ -1,4 +1,6 @@
-FROM crystallang/crystal:1.6.2-alpine AS builder
+FROM 84codes/crystal:1.8.2-alpine AS builder
+
+RUN apk add --update yaml-static
 
 COPY . /build/
 WORKDIR /build
