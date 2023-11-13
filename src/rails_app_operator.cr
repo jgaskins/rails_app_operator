@@ -2,7 +2,7 @@ require "kubernetes"
 require "log"
 
 LOG = Log.for("rails-app-operator")
-Log.setup_from_env
+Log.setup_from_env default_level: :info
 
 spawn do
   sleep 1.hour
