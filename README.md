@@ -30,7 +30,7 @@ Run the following commands to install some of the other related operators into y
 K8S_PROVIDER=aws # If you're on DigitalOcean, change this to `do` instead of `aws`
 
 # Install Nginx Ingress Controller
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.49.0/deploy/static/provider/$K8S_PROVIDER/deploy.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/$K8S_PROVIDER/deploy.yaml
 
 # Install Cert Manager (for automatically provisioning TLS certs)
 kubectl apply -f https://github.com/jetstack/cert-manager/releases/latest/download/cert-manager.yaml
