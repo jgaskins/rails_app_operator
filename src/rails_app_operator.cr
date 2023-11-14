@@ -350,6 +350,7 @@ def deploy(k8s : Kubernetes::Client, resource : Kubernetes::Resource(RailsApp))
           selector: {app: entrypoint_name},
           ports:    [{port: port}],
         },
+        force: true,
       )
 
       if domain = entrypoint.domain
