@@ -103,17 +103,16 @@ module Kubernetes
 end
 
 Kubernetes.import_crd "k8s/crd-rails-app.yaml"
-Kubernetes.define_resource(
-  name: "certificates",
-  group: "cert-manager.io",
-  type: Kubernetes::Resource(JSON::Any),
-  kind: "Certificate",
-  version: "v1",
-  prefix: "apis",
-  singular_name: "certificate",
-)
 
 module Kubernetes
+  define_resource "certificates",
+    group: "cert-manager.io",
+    type: Resource(JSON::Any),
+    kind: "Certificate",
+    version: "v1",
+    prefix: "apis",
+    singular_name: "certificate"
+
   define_resource "persistentvolumes",
     singular_name: "persistentvolume",
     group: "",
