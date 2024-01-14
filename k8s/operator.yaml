@@ -86,3 +86,4 @@ spec:
         - name: controller
           image: jgaskins/rails-app-operator:latest
           imagePullPolicy: Always
+      terminationGracePeriodSeconds: 3
