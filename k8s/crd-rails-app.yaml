@@ -138,6 +138,9 @@ spec:
                     properties:
                       name:
                         type: string
+                      image:
+                        type: string
+                        nullable: true
                       command:
                         type: array
                         nullable: true

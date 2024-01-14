@@ -425,7 +425,7 @@ def pod_spec(
 
   container_spec = {
     name:            "app",
-    image:           rails_app.image,
+    image:           entrypoint.try(&.image) || rails_app.image,
     imagePullPolicy: rails_app.image_pull_policy,
     command:         command,
     volumeMounts:    rails_app.directories.map { |dir|
