@@ -131,6 +131,10 @@ spec:
                     required:
                       - name
                       - path
+                annotations: &annotations
+                  type: object
+                  default: {}
+                  x-kubernetes-preserve-unknown-fields: true
                 entrypoints:
                   type: array
                   items:
@@ -177,6 +181,7 @@ spec:
                                 nullable: true
                           limits: *resources
                       node_selector: *node_selector
+                      annotations: *annotations
                       health_check:
                         type: object
                         nullable: true
