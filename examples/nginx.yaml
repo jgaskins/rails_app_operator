@@ -1,0 +1,23 @@
+---
+apiVersion: jgaskins.dev/v1beta1
+kind: RailsApp
+metadata:
+  name: nginx
+  namespace: default
+spec:
+  image: nginx
+  image_pull_policy: Always
+  entrypoints:
+    - name: web
+      command: [nginx, "-g", "daemon off;"]
+      port: 80
+      domain: nginx.example.com
+    - name: internal
+      command: [nginx, "-g", "daemon off;"]
+      port: 80
+
+  before_create:
+    command: [echo, "Creating..."]
+
+  before_update:
+    command: [echo, "Updating..."]
