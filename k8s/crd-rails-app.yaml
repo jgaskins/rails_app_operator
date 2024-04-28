@@ -213,7 +213,7 @@ spec:
                         nullable: true
                     required:
                       - name
-                before_update:
+                before_create: &hook
                   type: object
                   properties:
                     command:
@@ -223,16 +223,7 @@ spec:
                     env: *env
                     envFrom: *envFrom
                     node_selector: *node_selector
-                before_create:
-                  type: object
-                  properties:
-                    command:
-                      type: array
-                      items:
-                        type: string
-                    env: *env
-                    envFrom: *envFrom
-                    node_selector: *node_selector
+                before_update: *hook
                 service_account:
                   type: string
                   nullable: true
@@ -241,6 +232,8 @@ spec:
                 - image
                 - env
                 - entrypoints
+                - before_create
+                - before_update
   scope: Namespaced
   names:
     plural: rails-apps
