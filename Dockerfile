@@ -2,9 +2,12 @@ FROM 84codes/crystal:1.14.0-alpine AS builder
 
 RUN apk add --update yaml-static
 
-COPY . /build/
 WORKDIR /build
+COPY shard.yml shard.lock .
+RUN shards
 
+COPY src/ src/
+COPY k8s/ k8s/
 RUN shards build --release --static
 
 FROM scratch as final
