@@ -1,4 +1,4 @@
-FROM 84codes/crystal:1.12.1-alpine AS builder
+FROM 84codes/crystal:1.14.0-alpine AS builder
 
 RUN apk add --update yaml-static
 
