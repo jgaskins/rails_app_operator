@@ -1,4 +1,4 @@
-FROM 84codes/crystal:1.14.0-alpine AS builder
+FROM 84codes/crystal:1.15.1-alpine AS builder
 
 RUN apk add --update yaml-static
 
@@ -10,7 +10,7 @@ COPY src/ src/
 COPY k8s/ k8s/
 RUN shards build --release --static
 
-FROM scratch as final
+FROM scratch AS final
 
 COPY --from=builder /build/bin/rails_app_operator /
 WORKDIR /
