@@ -406,6 +406,55 @@
 
 
 
+  <h2>
+    <a id="overview" class="anchor" href="#overview">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Overview
+  </h2>
+
+  <p>The <code><a href="RailsApp.html">RailsApp</a></code> represents the resource being specified. It is the <code>spec</code> in the Kubernetes YAML.</p>
+<p>This resource comprises several different resources:</p>
+<ul>
+<li><code>Deployment</code> per <code>entrypoint</code></li>
+<li><code>Service</code> for each <code>entrypoint</code> with a <code>port</code> specified</li>
+<li><code>Ingress</code> for each <code>entrypoint</code> with a <code>domain</code> specified</li>
+<li><code>Certificate</code> (via <a href="https://cert-manager.io">CertManager</a>) for each <code>entrypoint</code> with a <code>domain</code> specified</li>
+<li><code>Job</code> for <code><a href="RailsApp.html#before_create%3ABeforeCreate-instance-method">#before_create</a></code> (automatically GCed upon completion)</li>
+<li><code>Job</code> for <code><a href="RailsApp.html#before_update%3ABeforeUpdate-instance-method">#before_update</a></code> (automatically GCed upon completion)</li>
+</ul>
+<p><span class="flag purple">NOTE</span>  despite this being called a <code><a href="RailsApp.html">RailsApp</a></code>, it's not only for Ruby on Rails apps. It was designed for them originally, but it quickly became useful for much more than apps built with that framework.</p>
+<p>Example:</p>
+<pre><code class="language-crystal">---
+apiVersion: jgaskins.dev/v1beta1
+kind: RailsApp
+metadata:
+  name: my-rails-app
+spec:
+  image: repo/image:tag
+  env:
+  - name: RAILS_ENV
+    value: production
+  - name: DATABASE_URL
+    value: postgres://user:password@host/db
+  - name: REDIS_URL
+    value: redis://redis
+
+  entrypoints:
+  - name: web                    # Pods will be called `my-rails-app-web-*-*`
+    domain: example.com          # The domain people will use to reach your app
+    port: 3000                   # What port the server listens on
+    command: [bin/rails, server] # Run the Rails server
+  - name: worker                 # Pods will be called `my-rails-app-worker-*-*`
+    command: [bin/sidekiq]       # Run the Sidekiq job processor
+
+  before_create:
+    command: [bin/rails, db:schema:load]
+  before_update:
+    command: [bin/rails, db:migrate]</code></pre>
+
 
 
 
