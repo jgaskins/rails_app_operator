@@ -31,7 +31,7 @@ module Kubernetes
       api_version : String = "v1",
       kind : String = "ConfigMap",
       force : Bool = false,
-      field_manager : String? = nil
+      field_manager : String? = nil,
     )
       name = metadata[:name]
       namespace = metadata[:namespace]
@@ -346,10 +346,7 @@ def deploy(k8s : Kubernetes::Client, resource : Kubernetes::Resource(RailsApp))
         selector: {matchLabels: labels},
         template: {
           metadata: {labels: labels},
-          spec:     pod_spec(
-            resource,
-            entrypoint: entrypoint,
-          ),
+          spec:     pod_spec(resource, entrypoint: entrypoint),
         },
       },
       force: true,
@@ -434,7 +431,7 @@ def pod_spec(
   command : Array(String)? = entrypoint.try(&.command),
   env : Array = [] of RailsApp::Entrypoints::Env,
   env_from : Array = [] of RailsApp::Entrypoints::EnvFrom,
-  node_selector = {} of String => JSON::Any
+  node_selector = {} of String => JSON::Any,
 )
   name = resource.metadata.name
   namespace = resource.metadata.namespace
