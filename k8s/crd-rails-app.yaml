@@ -165,6 +165,21 @@ spec:
                       replicas:
                         type: integer
                         default: 1
+                      deployment_strategy:
+                        type: object
+                        default: {}
+                        properties:
+                          duration_minutes:
+                            type: integer
+                            nullable: true
+                            description: How long a deployment should take in minutes.
+                          surge:
+                            type: string
+                            nullable: true
+                            description: The number or percentage of pods to roll out at a time.
+                          max_unavailable:
+                            type: string
+                            nullable: true
                       resources:
                         type: object
                         nullable: true

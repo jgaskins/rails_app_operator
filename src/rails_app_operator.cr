@@ -320,6 +320,12 @@ def deploy(k8s : Kubernetes::Client, resource : Kubernetes::Resource(RailsApp))
       "app.kubernetes.io/name":       entrypoint_name,
     }
 
+    deployment_strategy = entrypoint.deployment_strategy
+    if (duration_minutes = deployment_strategy.duration_minutes) && (surge_percentage = deployment_strategy.surge)
+      min_ready_seconds = (duration_minutes.minutes * (surge_percentage.to_i(strict: false) / 100)).total_seconds.to_i32
+      progress_deadline = (duration_minutes.minutes.total_seconds * 1.2).to_i
+    end
+
     info k8s.apply_deployment(
       metadata: {
         name:      entrypoint_name,
@@ -327,7 +333,15 @@ def deploy(k8s : Kubernetes::Client, resource : Kubernetes::Resource(RailsApp))
         labels:    labels,
       },
       spec: {
-        replicas: entrypoint.replicas,
+        replicas:                entrypoint.replicas,
+        minReadySeconds:         min_ready_seconds,
+        progressDeadlineSeconds: progress_deadline,
+        strategy:                {
+          rollingUpdate: {
+            maxSurge:       deployment_strategy.surge,
+            maxUnavailable: deployment_strategy.max_unavailable,
+          },
+        },
         selector: {matchLabels: labels},
         template: {
           metadata: {labels: labels},
