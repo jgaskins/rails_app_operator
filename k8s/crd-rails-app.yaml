@@ -18,23 +18,29 @@ spec:
               properties:
                 image:
                   type: string
+                  description: "The image tag to use by default for all entrypoints in this `RailsApp`"
                 image_pull_policy:
                   type: string
+                  enum: [IfNotPresent, Always]
                   default: "IfNotPresent"
+                  description: "Describes how images are pulled: `Always` pulls a fresh container image each time and `IfNotPresent` will pull a container image once and keep it cached. Use `Always` if your container images use mutable tags, such as `latest`."
                 image_pull_secrets:
                   type: array
                   default: []
                   items:
                     type: string
+                  description: "The name of the secret that contains container-registry credentials, allowing Kubernetes to pull the image from its repo. For more information, see the Kubernetes documentation on [pulling images from a private registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)."
                 envFrom: &envFrom
                   type: array
                   default: []
+                  description: "The source of an environment variable, such as a `ConfigMap` or `Secret`."
                   items:
                     type: object
                     properties:
                       secretRef:
                         type: object
                         nullable: true
+                        description: "A reference to the Kubernetes `Secret` resource containing the keys and values to set in the environment."
                         properties:
                           name:
                             type: string
@@ -43,6 +49,7 @@ spec:
                       configMapRef:
                         type: object
                         nullable: true
+                        description: "A reference to the Kubernetes `ConfigMap` resource containing the keys and values to set in the environment."
                         properties:
                           name:
                             type: string
@@ -51,47 +58,100 @@ spec:
                 env: &env
                   type: array
                   default: []
+                  description: |
+                    A list of `Env` objects representing environment variables.
+                    Either a `value` or `value_from` (in YAML: `valueFrom`)
+                    *must* be provided.
+
+                    ```yaml
+                    env:
+                      - name: REDIS_URL
+                        value: redis://redis
+                      - name: DATABASE_URL
+                        valueFrom:
+                          secretKeyRef:
+                            name: "postgres-app"
+                            value: "uri"
+                    ```
                   items:
                     type: object
                     properties:
                       name:
                         type: string
+                        description: |
+                          The name of the environment variable. If you reference
+                          `ENV["DATABASE_URL"]` in your app, you would put
+                          `DATABASE_URL` here.
                       value:
                         type: string
                         nullable: true
+                        description: |
+                          The hardcoded value of your environment variable.
                       valueFrom:
                         type: object
                         nullable: true
+                        description: |
+                          A container for references to the source of an environment
+                          variable's value. For example, if you store your env var
+                          in a `ConfigMap`, then you would set `configMapKeyRef` here.
                         properties:
                           configMapKeyRef:
                             type: object
                             nullable: true
+                            description: |
+                              A reference to the `ConfigMap` that holds the value of
+                              this environment variable.
                             properties:
                               name:
                                 type: string
+                                description: The name of the `ConfigMap` in the same namespace that holds the value you want to use for this env var.
                               key:
                                 type: string
+                                description: The `data` key inside the `ConfigMap` to get the value from.
                           secretKeyRef:
                             type: object
                             nullable: true
                             properties:
                               name:
                                 type: string
+                                description: The name of the `Secret` in the same namespace that holds the value you want to use for this env var.
                               key:
                                 type: string
+                                description: The `data` key inside the `ConfigMap` to get the value from.
                           fieldRef:
                             type: object
                             nullable: true
                             properties:
                               fieldPath:
                                 type: string
+                                description: The JSONPath of the `Pod`'s JSON representation to use for the value of this env var. For example, if you would like to set the value to the IP of the `Node` the pod is running on, you would use `.status.hostIP`.
                 node_selector: &node_selector
                   type: object
                   default: {}
+                  description: |
+                    A `Hash(String, String)` containing label/value pairs —
+                    pods for this `RailsApp` or `Entrypoints` will only be assigned
+                    to nodes that have these labels. For example, if you set
+                    `kubernetes.io/arch: arm64` here, pods will only be assigned
+                    to nodes running Arm64 processors.
                   x-kubernetes-preserve-unknown-fields: true
                 directories:
                   type: array
                   default: []
+                  description: |
+                    Create directories on the container's filesystem
+
+                    ```yaml
+                    directories:
+                      - path: /containing/path
+                        name: config
+                        files:
+                          - filename: app.yml
+                            content: |
+                              production:
+                                database: postgres://user:password@host/db_name
+                                redis: redis://redis
+                    ```
                   items:
                     type: object
                     properties:
@@ -137,37 +197,90 @@ spec:
                   x-kubernetes-preserve-unknown-fields: true
                 entrypoints:
                   type: array
+                  description: |
+                    The entrypoints for your application — each type of process
+                    you run, such as a Rails server and Sidekiq, is a separate
+                    entrypoint. This is similar to entries in a `Procfile`.
                   items:
                     type: object
                     properties:
                       name:
                         type: string
+                        description: The name of your entrypoint, such as `web` or `worker`
                       image:
                         type: string
                         nullable: true
+                        description: |
+                          Optional override for the container image for this entrypoint if it differs from the rest of your app. This is useful when you want to deploy something to support your app, such as a Prometheus exporter.
                       command:
                         type: array
                         nullable: true
+                        description: |
+                          Optional override for the command to run to run this entrypoint if it differs from the `CMD` directive in your container image. For example, to run Sidekiq:
+
+                          ```
+                          command: [bundle, exec, sidekiq]
+                          ```
                         items:
                           type: string
-                      domain:
-                        type: string
-                        nullable: true
                       port:
                         type: integer
+                        description: |
+                          The port your entrypoint will be listening on. This will provision a `Service` resource so the entrypoint will be reachable from inside the Kubernetes cluster.
+                        nullable: true
+                      domain:
+                        type: string
+                        description: |
+                          The domain your app should be accessible on. This will provision `Ingress` and `Certificate` resources so that this entrypoint will be reachable via the public internet. Without this property, it will only be accessible via plaintext inside the cluster.
                         nullable: true
                       path:
                         type: string
+                        description: |
+                          The path matcher for the `Ingress` resource, defaults to `"/"`. All incoming requests from outside the cluster with this entrypoint's `domain` and `path` will be routed to this entrypoint.
                         default: "/"
                       path_type:
                         type: string
+                        description: |
+                          Defines the way the `path` is matched, defaulting to `Prefix`.
+
+                          - `Prefix` matches any request path that starts with `path`
+                          - `Exact` matches only that exact path
+                          - `ImplementationSpecific` depends on the Kubernetes `IngressClass`. This operator uses `nginx` as the `IngressClass`, which `ImplementationSpecific` [here](https://kubernetes.github.io/ingress-nginx/faq/#validation-of-path).
+
+                          ```
+                          entrypoints:
+                          - name: web
+                            domain: example.com
+                            path: /
+                          ```
                         default: "Prefix"
+                        enum:
+                        - Prefix
+                        - Exact
+                        - ImplementationSpecific
                       replicas:
                         type: integer
+                        description: |
+                          The number of pods to run for this entrypoint, defaulting to `1`.
                         default: 1
                       deployment_strategy:
                         type: object
                         default: {}
+                        description: |
+                          The strategy to use when updating this entrypoint, useful for slow canary rollouts.
+
+                          When you need to deploy your app safely, it can be best to roll it out slowly over several minutes. If your first few pods fail health checks, the deployment will pause. You can then use `kubectl rollout undo deployment` in your deployment script to roll the deployment back.
+
+                          How those health checks fail is specific to your app, but a useful pattern is for the pod to track the number of failures (for example, the number of HTTP 500s or exceptions raised in background jobs) as a percentage of all units of work since the pod started and, when that number exceeds some threshold (for example, 5%), return a failure response for the health check.
+
+                          ```yaml
+                          deployment_strategy:
+                            duration_minutes: 10
+                            surge: 5%
+                            max_unavailable: 0%
+                          ```
+
+                          WARNING: This is an experimental property and is subject to change.
                         properties:
                           duration_minutes:
                             type: integer
@@ -183,6 +296,8 @@ spec:
                       resources:
                         type: object
                         nullable: true
+                        description: |
+                          The resources you want to allocate for each pod and/or limit each pod to.
                         properties:
                           requests: &resources
                             type: object
@@ -191,45 +306,84 @@ spec:
                               cpu:
                                 type: string
                                 nullable: true
+                                description: |
+                                  The number of CPU cores or fractions of a core.
+
+                                  Examples:
+                                  - "1"     # 1 CPU core
+                                  - "500m" # 500 millicores, half of a CPU core
                               memory:
                                 type: string
                                 nullable: true
+                                description: |
+                                  The amount of bytes of memory expressed as a string using [IEC](https://crystal-lang.org/api/1.15.1/Int/BinaryPrefixFormat.html#IEC) prefixes.
+
+                                  Examples:
+                                  - 100Mi # 100 Mibibytes
+                                  - 2Gi   # 2 Gibibytes
+
+                                  I can't believe I just wrote those words. They're absolutely ridiculous. But whatever, they're more accurate in this case.
                           limits: *resources
                       node_selector: *node_selector
                       annotations: *annotations
                       health_check:
                         type: object
                         nullable: true
+                        description: |
+                          HTTP health checks to ensure 2 things:
+
+                          1. New pods must pass these health checks before old pods are terminated
+                          2. Pods will be checked on the `run_every` interval to make sure it's _still_ alive. If it fails `failure_threshold` times, the pod will be restarted. If it continues to fail, it will enter a [`CrashLoopBackOff`](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-restarts) state.
                         properties:
                           path:
                             type: string
+                            description: |
+                              The path to send a `GET` request to in order to ensure the pod is healthy.
                             default: "/"
                           start_after:
                             type: integer
                             nullable: true
+                            description: |
+                              The number of seconds after which health checks will begin — useful when your pods take several seconds to start so they don't end up being restarted simply because they took too long.
                           run_every:
                             type: integer
                             nullable: true
+                            description: |
+                              The number of seconds between health checks.
                           failure_threshold:
                             type: integer
                             nullable: true
+                            description: |
+                              The number of health check failures that will be tolerated before the pod is restarted. Generally speaking, this should never be `1` — failures can happen for all kinds of reasons and a pod restart may terminate in-flight work.
                       ingress:
                         type: object
                         nullable: true
+                        description: |
+                          Properties to assign to any `Ingress` that gets created for this entrypoint.
                         properties:
                           annotations:
                             type: object
                             nullable: true
+                            description: |
+                              A `Hash(String, String)` representing the [annotations that to apply to the `Ingress` resource to set NGINX configuration options](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/).
+
+                              ```yaml
+                              nginx.ingress.kubernetes.io/default-backend: not-available # Fall back to the `not-available` Service if there are no available pods
+                              ```
                             x-kubernetes-preserve-unknown-fields: true
                       envFrom: *envFrom
                       env: *env
-                      service_account:
+                      service_account: &service_account
                         type: string
                         nullable: true
+                        description: |
+                          Use the given Kubernetes `ServiceAccount` to run pods for this app. This is extremely rare to need to set, so if you don't know what to set here, you almost certainly want to leave it blank.
                     required:
                       - name
                 before_create: &hook
                   type: object
+                  description: |
+                    When the `RailsApp` is created, this job is executed. Usually this is used to provision the database schema.
                   properties:
                     command:
                       type: array
@@ -238,10 +392,11 @@ spec:
                     env: *env
                     envFrom: *envFrom
                     node_selector: *node_selector
-                before_update: *hook
-                service_account:
-                  type: string
-                  nullable: true
+                before_update:
+                  <<: *hook
+                  description: |
+                    When the `RailsApp` is updated, this job is executed. Usually this is used to run database schema and data migrations.
+                service_account: *service_account
 
               required:
                 - image

@@ -1,0 +1,1573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Crystal Docs 1.10.1">
+<meta name="crystal_docs.project_version" content="main-dev">
+<meta name="crystal_docs.project_name" content="rails_app_operator">
+
+
+
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/doc.js"></script>
+
+  <meta name="repository-name" content="rails_app_operator">
+  <title>Kubernetes::Client - rails_app_operator main-dev</title>
+  <script type="text/javascript">
+    CrystalDocs.base_path = "../";
+  </script>
+</head>
+<body>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill="currentColor" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+<input type="checkbox" id="sidebar-btn">
+<label for="sidebar-btn" id="sidebar-btn-label">
+  <svg class="open" xmlns="http://www.w3.org/2000/svg" height="2em" width="2em" viewBox="0 0 512 512"><title>Open Sidebar</title><path fill="currentColor" d="M80 96v64h352V96H80zm0 112v64h352v-64H80zm0 112v64h352v-64H80z"></path></svg>
+  <svg class="close" xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 512 512"><title>Close Sidebar</title><path fill="currentColor" d="m118.6 73.4-45.2 45.2L210.7 256 73.4 393.4l45.2 45.2L256 301.3l137.4 137.3 45.2-45.2L301.3 256l137.3-137.4-45.2-45.2L256 210.7Z"></path></svg>
+</label>
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="project-summary">
+      <h1 class="project-name">
+        <a href="../index.html">
+          rails_app_operator
+        </a>
+      </h1>
+
+      <span class="project-version">
+        main-dev
+      </span>
+    </div>
+  </div>
+
+  <div class="search-results hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class=" " data-id="rails_app_operator/toplevel" data-name="top level namespace">
+      <a href="../toplevel.html">Top Level Namespace</a>
+      
+    </li>
+  
+  <li class="parent open current" data-id="rails_app_operator/Kubernetes" data-name="kubernetes">
+      <a href="../Kubernetes.html">Kubernetes</a>
+      
+        <ul>
+  
+  <li class=" current" data-id="rails_app_operator/Kubernetes/Client" data-name="kubernetes::client">
+      <a href="../Kubernetes/Client.html">Client</a>
+      
+    </li>
+  
+  <li class=" " data-id="rails_app_operator/Kubernetes/ConfigMap" data-name="kubernetes::configmap">
+      <a href="../Kubernetes/ConfigMap.html">ConfigMap</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="rails_app_operator/RailsApp" data-name="railsapp">
+      <a href="../RailsApp.html">RailsApp</a>
+      
+        <ul>
+  
+  <li class="parent " data-id="rails_app_operator/RailsApp/BeforeCreate" data-name="railsapp::beforecreate">
+      <a href="../RailsApp/BeforeCreate.html">BeforeCreate</a>
+      
+        <ul>
+  
+  <li class="parent " data-id="rails_app_operator/RailsApp/BeforeCreate/Env" data-name="railsapp::beforecreate::env">
+      <a href="../RailsApp/BeforeCreate/Env.html">Env</a>
+      
+        <ul>
+  
+  <li class="parent " data-id="rails_app_operator/RailsApp/BeforeCreate/Env/ValueFrom" data-name="railsapp::beforecreate::env::valuefrom">
+      <a href="../RailsApp/BeforeCreate/Env/ValueFrom.html">ValueFrom</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rails_app_operator/RailsApp/BeforeCreate/Env/ValueFrom/ConfigMapKeyRef" data-name="railsapp::beforecreate::env::valuefrom::configmapkeyref">
+      <a href="../RailsApp/BeforeCreate/Env/ValueFrom/ConfigMapKeyRef.html">ConfigMapKeyRef</a>
+      
+    </li>
+  
+  <li class=" " data-id="rails_app_operator/RailsApp/BeforeCreate/Env/ValueFrom/FieldRef" data-name="railsapp::beforecreate::env::valuefrom::fieldref">
+      <a href="../RailsApp/BeforeCreate/Env/ValueFrom/FieldRef.html">FieldRef</a>
+      
+    </li>
+  
+  <li class=" " data-id="rails_app_operator/RailsApp/BeforeCreate/Env/ValueFrom/SecretKeyRef" data-name="railsapp::beforecreate::env::valuefrom::secretkeyref">
+      <a href="../RailsApp/BeforeCreate/Env/ValueFrom/SecretKeyRef.html">SecretKeyRef</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="rails_app_operator/RailsApp/BeforeCreate/EnvFrom" data-name="railsapp::beforecreate::envfrom">
+      <a href="../RailsApp/BeforeCreate/EnvFrom.html">EnvFrom</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rails_app_operator/RailsApp/BeforeCreate/EnvFrom/ConfigMapRef" data-name="railsapp::beforecreate::envfrom::configmapref">
+      <a href="../RailsApp/BeforeCreate/EnvFrom/ConfigMapRef.html">ConfigMapRef</a>
+      
+    </li>
+  
+  <li class=" " data-id="rails_app_operator/RailsApp/BeforeCreate/EnvFrom/SecretRef" data-name="railsapp::beforecreate::envfrom::secretref">
+      <a href="../RailsApp/BeforeCreate/EnvFrom/SecretRef.html">SecretRef</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="rails_app_operator/RailsApp/BeforeUpdate" data-name="railsapp::beforeupdate">
+      <a href="../RailsApp/BeforeUpdate.html">BeforeUpdate</a>
+      
+        <ul>
+  
+  <li class="parent " data-id="rails_app_operator/RailsApp/BeforeUpdate/Env" data-name="railsapp::beforeupdate::env">
+      <a href="../RailsApp/BeforeUpdate/Env.html">Env</a>
+      
+        <ul>
+  
+  <li class="parent " data-id="rails_app_operator/RailsApp/BeforeUpdate/Env/ValueFrom" data-name="railsapp::beforeupdate::env::valuefrom">
+      <a href="../RailsApp/BeforeUpdate/Env/ValueFrom.html">ValueFrom</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rails_app_operator/RailsApp/BeforeUpdate/Env/ValueFrom/ConfigMapKeyRef" data-name="railsapp::beforeupdate::env::valuefrom::configmapkeyref">
+      <a href="../RailsApp/BeforeUpdate/Env/ValueFrom/ConfigMapKeyRef.html">ConfigMapKeyRef</a>
+      
+    </li>
+  
+  <li class=" " data-id="rails_app_operator/RailsApp/BeforeUpdate/Env/ValueFrom/FieldRef" data-name="railsapp::beforeupdate::env::valuefrom::fieldref">
+      <a href="../RailsApp/BeforeUpdate/Env/ValueFrom/FieldRef.html">FieldRef</a>
+      
+    </li>
+  
+  <li class=" " data-id="rails_app_operator/RailsApp/BeforeUpdate/Env/ValueFrom/SecretKeyRef" data-name="railsapp::beforeupdate::env::valuefrom::secretkeyref">
+      <a href="../RailsApp/BeforeUpdate/Env/ValueFrom/SecretKeyRef.html">SecretKeyRef</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="rails_app_operator/RailsApp/BeforeUpdate/EnvFrom" data-name="railsapp::beforeupdate::envfrom">
+      <a href="../RailsApp/BeforeUpdate/EnvFrom.html">EnvFrom</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rails_app_operator/RailsApp/BeforeUpdate/EnvFrom/ConfigMapRef" data-name="railsapp::beforeupdate::envfrom::configmapref">
+      <a href="../RailsApp/BeforeUpdate/EnvFrom/ConfigMapRef.html">ConfigMapRef</a>
+      
+    </li>
+  
+  <li class=" " data-id="rails_app_operator/RailsApp/BeforeUpdate/EnvFrom/SecretRef" data-name="railsapp::beforeupdate::envfrom::secretref">
+      <a href="../RailsApp/BeforeUpdate/EnvFrom/SecretRef.html">SecretRef</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="rails_app_operator/RailsApp/Directories" data-name="railsapp::directories">
+      <a href="../RailsApp/Directories.html">Directories</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rails_app_operator/RailsApp/Directories/Files" data-name="railsapp::directories::files">
+      <a href="../RailsApp/Directories/Files.html">Files</a>
+      
+    </li>
+  
+  <li class=" " data-id="rails_app_operator/RailsApp/Directories/PersistentStorage" data-name="railsapp::directories::persistentstorage">
+      <a href="../RailsApp/Directories/PersistentStorage.html">PersistentStorage</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="rails_app_operator/RailsApp/Entrypoints" data-name="railsapp::entrypoints">
+      <a href="../RailsApp/Entrypoints.html">Entrypoints</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rails_app_operator/RailsApp/Entrypoints/DeploymentStrategy" data-name="railsapp::entrypoints::deploymentstrategy">
+      <a href="../RailsApp/Entrypoints/DeploymentStrategy.html">DeploymentStrategy</a>
+      
+    </li>
+  
+  <li class="parent " data-id="rails_app_operator/RailsApp/Entrypoints/Env" data-name="railsapp::entrypoints::env">
+      <a href="../RailsApp/Entrypoints/Env.html">Env</a>
+      
+        <ul>
+  
+  <li class="parent " data-id="rails_app_operator/RailsApp/Entrypoints/Env/ValueFrom" data-name="railsapp::entrypoints::env::valuefrom">
+      <a href="../RailsApp/Entrypoints/Env/ValueFrom.html">ValueFrom</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rails_app_operator/RailsApp/Entrypoints/Env/ValueFrom/ConfigMapKeyRef" data-name="railsapp::entrypoints::env::valuefrom::configmapkeyref">
+      <a href="../RailsApp/Entrypoints/Env/ValueFrom/ConfigMapKeyRef.html">ConfigMapKeyRef</a>
+      
+    </li>
+  
+  <li class=" " data-id="rails_app_operator/RailsApp/Entrypoints/Env/ValueFrom/FieldRef" data-name="railsapp::entrypoints::env::valuefrom::fieldref">
+      <a href="../RailsApp/Entrypoints/Env/ValueFrom/FieldRef.html">FieldRef</a>
+      
+    </li>
+  
+  <li class=" " data-id="rails_app_operator/RailsApp/Entrypoints/Env/ValueFrom/SecretKeyRef" data-name="railsapp::entrypoints::env::valuefrom::secretkeyref">
+      <a href="../RailsApp/Entrypoints/Env/ValueFrom/SecretKeyRef.html">SecretKeyRef</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="rails_app_operator/RailsApp/Entrypoints/EnvFrom" data-name="railsapp::entrypoints::envfrom">
+      <a href="../RailsApp/Entrypoints/EnvFrom.html">EnvFrom</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rails_app_operator/RailsApp/Entrypoints/EnvFrom/ConfigMapRef" data-name="railsapp::entrypoints::envfrom::configmapref">
+      <a href="../RailsApp/Entrypoints/EnvFrom/ConfigMapRef.html">ConfigMapRef</a>
+      
+    </li>
+  
+  <li class=" " data-id="rails_app_operator/RailsApp/Entrypoints/EnvFrom/SecretRef" data-name="railsapp::entrypoints::envfrom::secretref">
+      <a href="../RailsApp/Entrypoints/EnvFrom/SecretRef.html">SecretRef</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="rails_app_operator/RailsApp/Entrypoints/HealthCheck" data-name="railsapp::entrypoints::healthcheck">
+      <a href="../RailsApp/Entrypoints/HealthCheck.html">HealthCheck</a>
+      
+    </li>
+  
+  <li class=" " data-id="rails_app_operator/RailsApp/Entrypoints/Ingress" data-name="railsapp::entrypoints::ingress">
+      <a href="../RailsApp/Entrypoints/Ingress.html">Ingress</a>
+      
+    </li>
+  
+  <li class=" " data-id="rails_app_operator/RailsApp/Entrypoints/PathType" data-name="railsapp::entrypoints::pathtype">
+      <a href="../RailsApp/Entrypoints/PathType.html">PathType</a>
+      
+    </li>
+  
+  <li class="parent " data-id="rails_app_operator/RailsApp/Entrypoints/Resources" data-name="railsapp::entrypoints::resources">
+      <a href="../RailsApp/Entrypoints/Resources.html">Resources</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rails_app_operator/RailsApp/Entrypoints/Resources/Limits" data-name="railsapp::entrypoints::resources::limits">
+      <a href="../RailsApp/Entrypoints/Resources/Limits.html">Limits</a>
+      
+    </li>
+  
+  <li class=" " data-id="rails_app_operator/RailsApp/Entrypoints/Resources/Requests" data-name="railsapp::entrypoints::resources::requests">
+      <a href="../RailsApp/Entrypoints/Resources/Requests.html">Requests</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="rails_app_operator/RailsApp/Env" data-name="railsapp::env">
+      <a href="../RailsApp/Env.html">Env</a>
+      
+        <ul>
+  
+  <li class="parent " data-id="rails_app_operator/RailsApp/Env/ValueFrom" data-name="railsapp::env::valuefrom">
+      <a href="../RailsApp/Env/ValueFrom.html">ValueFrom</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rails_app_operator/RailsApp/Env/ValueFrom/ConfigMapKeyRef" data-name="railsapp::env::valuefrom::configmapkeyref">
+      <a href="../RailsApp/Env/ValueFrom/ConfigMapKeyRef.html">ConfigMapKeyRef</a>
+      
+    </li>
+  
+  <li class=" " data-id="rails_app_operator/RailsApp/Env/ValueFrom/FieldRef" data-name="railsapp::env::valuefrom::fieldref">
+      <a href="../RailsApp/Env/ValueFrom/FieldRef.html">FieldRef</a>
+      
+    </li>
+  
+  <li class=" " data-id="rails_app_operator/RailsApp/Env/ValueFrom/SecretKeyRef" data-name="railsapp::env::valuefrom::secretkeyref">
+      <a href="../RailsApp/Env/ValueFrom/SecretKeyRef.html">SecretKeyRef</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="rails_app_operator/RailsApp/EnvFrom" data-name="railsapp::envfrom">
+      <a href="../RailsApp/EnvFrom.html">EnvFrom</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rails_app_operator/RailsApp/EnvFrom/ConfigMapRef" data-name="railsapp::envfrom::configmapref">
+      <a href="../RailsApp/EnvFrom/ConfigMapRef.html">ConfigMapRef</a>
+      
+    </li>
+  
+  <li class=" " data-id="rails_app_operator/RailsApp/EnvFrom/SecretRef" data-name="railsapp::envfrom::secretref">
+      <a href="../RailsApp/EnvFrom/SecretRef.html">SecretRef</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="rails_app_operator/RailsApp/ImagePullPolicy" data-name="railsapp::imagepullpolicy">
+      <a href="../RailsApp/ImagePullPolicy.html">ImagePullPolicy</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1 class="type-name">
+
+  <span class="kind">class</span> Kubernetes::<wbr>Client
+
+</h1>
+
+
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Kubernetes/Client.html">Kubernetes::Client</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="defined-in" class="anchor" href="#defined-in">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Defined in:
+  </h2>
+  
+    
+      <a href="https://github.com/jgaskins/rails_app_operator/blob/main/lib/kubernetes/src/kubernetes.cr#L15" target="_blank">
+        lib/kubernetes/src/kubernetes.cr:15
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/jgaskins/rails_app_operator/blob/main/lib/kubernetes/src/kubernetes.cr#L1199" target="_blank">
+        lib/kubernetes/src/kubernetes.cr:1199
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/jgaskins/rails_app_operator/blob/main/lib/kubernetes/src/kubernetes.cr#L1203" target="_blank">
+        lib/kubernetes/src/kubernetes.cr:1203
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/jgaskins/rails_app_operator/blob/main/lib/kubernetes/src/kubernetes.cr#L1208" target="_blank">
+        lib/kubernetes/src/kubernetes.cr:1208
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/jgaskins/rails_app_operator/blob/main/lib/kubernetes/src/kubernetes.cr#L1213" target="_blank">
+        lib/kubernetes/src/kubernetes.cr:1213
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/jgaskins/rails_app_operator/blob/main/lib/kubernetes/src/kubernetes.cr#L1218" target="_blank">
+        lib/kubernetes/src/kubernetes.cr:1218
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/jgaskins/rails_app_operator/blob/main/lib/kubernetes/src/kubernetes.cr#L1223" target="_blank">
+        lib/kubernetes/src/kubernetes.cr:1223
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/jgaskins/rails_app_operator/blob/main/lib/kubernetes/src/kubernetes.cr#L1229" target="_blank">
+        lib/kubernetes/src/kubernetes.cr:1229
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/jgaskins/rails_app_operator/blob/main/lib/kubernetes/src/kubernetes.cr#L1235" target="_blank">
+        lib/kubernetes/src/kubernetes.cr:1235
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L17" target="_blank">
+        rails_app_operator.cr:17
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L25" target="_blank">
+        rails_app_operator.cr:25
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L103" target="_blank">
+        rails_app_operator.cr:103
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L111" target="_blank">
+        rails_app_operator.cr:111
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L119" target="_blank">
+        rails_app_operator.cr:119
+      </a>
+    
+    <br/>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#apply_certificate%28resource%3AResource%28JSON%3A%3AAny%29%2Cspec%2Cname%3AString%3Dresource.metadata.name%2Cnamespace%3AString%7CNil%3Dresource.metadata.namespace%2Cforce%3ABool%3Dfalse%2Cfield_manager%3AString%7CNil%3Dnil%29-instance-method" class="signature"><strong>#apply_certificate</strong>(resource : Resource(JSON::Any), spec, name : String = resource.metadata.name, namespace : String | Nil = resource.metadata.namespace, force : Bool = <span class="n">false</span>, field_manager : String | Nil = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#apply_certificate%28metadata%3ANamedTuple%7CMetadata%2Capi_version%3AString%3D%22cert-manager.io/v1%22%2Ckind%3AString%3D%22Certificate%22%2Cforce%3ABool%3Dfalse%2Cfield_manager%3AString%7CNil%3Dnil%2C%2A%2Akwargs%29-instance-method" class="signature"><strong>#apply_certificate</strong>(metadata : NamedTuple | Metadata, api_version : String = <span class="s">&quot;cert-manager.io/v1&quot;</span>, kind : String = <span class="s">&quot;Certificate&quot;</span>, force : Bool = <span class="n">false</span>, field_manager : String | Nil = <span class="n">nil</span>, **kwargs)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#apply_configmap%28resource%3AKubernetes%3A%3AConfigMap%2Cspec%2Cname%3AString%3Dresource.metadata.name%2Cnamespace%3AString%7CNil%3Dresource.metadata.namespace%2Cforce%3ABool%3Dfalse%2Cfield_manager%3AString%7CNil%3Dnil%29-instance-method" class="signature"><strong>#apply_configmap</strong>(resource : Kubernetes::ConfigMap, spec, name : String = resource.metadata.name, namespace : String | Nil = resource.metadata.namespace, force : Bool = <span class="n">false</span>, field_manager : String | Nil = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#apply_configmap%28metadata%3ANamedTuple%2Cdata%2Cstatus%3Dnil%2Capi_version%3AString%3D%22v1%22%2Ckind%3AString%3D%22ConfigMap%22%2Cforce%3ABool%3Dfalse%2Cfield_manager%3AString%7CNil%3Dnil%29-instance-method" class="signature"><strong>#apply_configmap</strong>(metadata : NamedTuple, data, status = <span class="n">nil</span>, api_version : String = <span class="s">&quot;v1&quot;</span>, kind : String = <span class="s">&quot;ConfigMap&quot;</span>, force : Bool = <span class="n">false</span>, field_manager : String | Nil = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#apply_configmap%28metadata%3ANamedTuple%7CMetadata%2Capi_version%3AString%3D%22/v1%22%2Ckind%3AString%3D%22ConfigMap%22%2Cforce%3ABool%3Dfalse%2Cfield_manager%3AString%7CNil%3Dnil%2C%2A%2Akwargs%29-instance-method" class="signature"><strong>#apply_configmap</strong>(metadata : NamedTuple | Metadata, api_version : String = <span class="s">&quot;/v1&quot;</span>, kind : String = <span class="s">&quot;ConfigMap&quot;</span>, force : Bool = <span class="n">false</span>, field_manager : String | Nil = <span class="n">nil</span>, **kwargs)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#apply_persistentvolume%28resource%3AResource%28JSON%3A%3AAny%29%2Cspec%2Cname%3AString%3Dresource.metadata.name%2Cforce%3ABool%3Dfalse%2Cfield_manager%3AString%7CNil%3Dnil%29-instance-method" class="signature"><strong>#apply_persistentvolume</strong>(resource : Resource(JSON::Any), spec, name : String = resource.metadata.name, force : Bool = <span class="n">false</span>, field_manager : String | Nil = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#apply_persistentvolume%28metadata%3ANamedTuple%7CMetadata%2Capi_version%3AString%3D%22/v1%22%2Ckind%3AString%3D%22PersistentVolume%22%2Cforce%3ABool%3Dfalse%2Cfield_manager%3AString%7CNil%3Dnil%2C%2A%2Akwargs%29-instance-method" class="signature"><strong>#apply_persistentvolume</strong>(metadata : NamedTuple | Metadata, api_version : String = <span class="s">&quot;/v1&quot;</span>, kind : String = <span class="s">&quot;PersistentVolume&quot;</span>, force : Bool = <span class="n">false</span>, field_manager : String | Nil = <span class="n">nil</span>, **kwargs)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#apply_persistentvolumeclaim%28resource%3AResource%28JSON%3A%3AAny%29%2Cspec%2Cname%3AString%3Dresource.metadata.name%2Cnamespace%3AString%7CNil%3Dresource.metadata.namespace%2Cforce%3ABool%3Dfalse%2Cfield_manager%3AString%7CNil%3Dnil%29-instance-method" class="signature"><strong>#apply_persistentvolumeclaim</strong>(resource : Resource(JSON::Any), spec, name : String = resource.metadata.name, namespace : String | Nil = resource.metadata.namespace, force : Bool = <span class="n">false</span>, field_manager : String | Nil = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#apply_persistentvolumeclaim%28metadata%3ANamedTuple%7CMetadata%2Capi_version%3AString%3D%22/v1%22%2Ckind%3AString%3D%22PersistentVolumeClaim%22%2Cforce%3ABool%3Dfalse%2Cfield_manager%3AString%7CNil%3Dnil%2C%2A%2Akwargs%29-instance-method" class="signature"><strong>#apply_persistentvolumeclaim</strong>(metadata : NamedTuple | Metadata, api_version : String = <span class="s">&quot;/v1&quot;</span>, kind : String = <span class="s">&quot;PersistentVolumeClaim&quot;</span>, force : Bool = <span class="n">false</span>, field_manager : String | Nil = <span class="n">nil</span>, **kwargs)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#apply_rails_app%28resource%3AKubernetes%3A%3AResource%28RailsApp%29%2Cspec%2Cname%3AString%3Dresource.metadata.name%2Cnamespace%3AString%7CNil%3Dresource.metadata.namespace%2Cforce%3ABool%3Dfalse%2Cfield_manager%3AString%7CNil%3Dnil%29-instance-method" class="signature"><strong>#apply_rails_app</strong>(resource : Kubernetes::Resource(RailsApp), spec, name : String = resource.metadata.name, namespace : String | Nil = resource.metadata.namespace, force : Bool = <span class="n">false</span>, field_manager : String | Nil = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#apply_rails_app%28metadata%3ANamedTuple%7CMetadata%2Capi_version%3AString%3D%22jgaskins.dev/v1beta1%22%2Ckind%3AString%3D%22RailsApp%22%2Cforce%3ABool%3Dfalse%2Cfield_manager%3AString%7CNil%3Dnil%2C%2A%2Akwargs%29-instance-method" class="signature"><strong>#apply_rails_app</strong>(metadata : NamedTuple | Metadata, api_version : String = <span class="s">&quot;jgaskins.dev/v1beta1&quot;</span>, kind : String = <span class="s">&quot;RailsApp&quot;</span>, force : Bool = <span class="n">false</span>, field_manager : String | Nil = <span class="n">nil</span>, **kwargs)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#certificate%28name%3AString%2Cnamespace%3AString%3D%22default%22%2Cresource_version%3AString%3D%22%22%29-instance-method" class="signature"><strong>#certificate</strong>(name : String, namespace : String = <span class="s">&quot;default&quot;</span>, resource_version : String = <span class="s">&quot;&quot;</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#certificates%28namespace%3AString%7CNil%3D%22default%22%2Clabel_selector%3Dnil%29-instance-method" class="signature"><strong>#certificates</strong>(namespace : String | Nil = <span class="s">&quot;default&quot;</span>, label_selector = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#configmap%28name%3AString%2Cnamespace%3AString%3D%22default%22%2Cresource_version%3AString%3D%22%22%29-instance-method" class="signature"><strong>#configmap</strong>(name : String, namespace : String = <span class="s">&quot;default&quot;</span>, resource_version : String = <span class="s">&quot;&quot;</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#configmap%28namespace%3AString%7CNil%3D%22default%22%2Clabel_selector%3Dnil%29-instance-method" class="signature"><strong>#configmap</strong>(namespace : String | Nil = <span class="s">&quot;default&quot;</span>, label_selector = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#delete_certificate%28resource%3AResource%28JSON%3A%3AAny%29%29-instance-method" class="signature"><strong>#delete_certificate</strong>(resource : Resource(JSON::Any))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#delete_certificate%28name%3AString%2Cnamespace%3AString%3D%22default%22%29-instance-method" class="signature"><strong>#delete_certificate</strong>(name : String, namespace : String = <span class="s">&quot;default&quot;</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#delete_configmap%28resource%3AKubernetes%3A%3AConfigMap%29-instance-method" class="signature"><strong>#delete_configmap</strong>(resource : Kubernetes::ConfigMap)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#delete_configmap%28name%3AString%2Cnamespace%3AString%3D%22default%22%29-instance-method" class="signature"><strong>#delete_configmap</strong>(name : String, namespace : String = <span class="s">&quot;default&quot;</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#delete_persistentvolume%28resource%3AResource%28JSON%3A%3AAny%29%29-instance-method" class="signature"><strong>#delete_persistentvolume</strong>(resource : Resource(JSON::Any))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#delete_persistentvolume%28name%3AString%29-instance-method" class="signature"><strong>#delete_persistentvolume</strong>(name : String)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#delete_persistentvolumeclaim%28resource%3AResource%28JSON%3A%3AAny%29%29-instance-method" class="signature"><strong>#delete_persistentvolumeclaim</strong>(resource : Resource(JSON::Any))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#delete_persistentvolumeclaim%28name%3AString%2Cnamespace%3AString%3D%22default%22%29-instance-method" class="signature"><strong>#delete_persistentvolumeclaim</strong>(name : String, namespace : String = <span class="s">&quot;default&quot;</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#delete_rails_app%28resource%3AKubernetes%3A%3AResource%28RailsApp%29%29-instance-method" class="signature"><strong>#delete_rails_app</strong>(resource : Kubernetes::Resource(RailsApp))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#delete_rails_app%28name%3AString%2Cnamespace%3AString%3D%22default%22%29-instance-method" class="signature"><strong>#delete_rails_app</strong>(name : String, namespace : String = <span class="s">&quot;default&quot;</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#patch_certificate%28name%3AString%2Cnamespace%2C%2A%2Akwargs%29-instance-method" class="signature"><strong>#patch_certificate</strong>(name : String, namespace, **kwargs)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#patch_certificate_subresource%28name%3AString%2Csubresource%3AString%2Cnamespace%3AString%3D%22default%22%2C%2A%2Aargs%29-instance-method" class="signature"><strong>#patch_certificate_subresource</strong>(name : String, subresource : String, namespace : String = <span class="s">&quot;default&quot;</span>, **args)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#patch_configmap%28name%3AString%2Cnamespace%2C%2A%2Akwargs%29-instance-method" class="signature"><strong>#patch_configmap</strong>(name : String, namespace, **kwargs)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#patch_configmap_subresource%28name%3AString%2Csubresource%3AString%2Cnamespace%3AString%3D%22default%22%2C%2A%2Aargs%29-instance-method" class="signature"><strong>#patch_configmap_subresource</strong>(name : String, subresource : String, namespace : String = <span class="s">&quot;default&quot;</span>, **args)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#patch_persistentvolume%28name%3AString%2C%2A%2Akwargs%29-instance-method" class="signature"><strong>#patch_persistentvolume</strong>(name : String, **kwargs)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#patch_persistentvolume_subresource%28name%3AString%2Csubresource%3AString%2C%2A%2Aargs%29-instance-method" class="signature"><strong>#patch_persistentvolume_subresource</strong>(name : String, subresource : String, **args)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#patch_persistentvolumeclaim%28name%3AString%2Cnamespace%2C%2A%2Akwargs%29-instance-method" class="signature"><strong>#patch_persistentvolumeclaim</strong>(name : String, namespace, **kwargs)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#patch_persistentvolumeclaim_subresource%28name%3AString%2Csubresource%3AString%2Cnamespace%3AString%3D%22default%22%2C%2A%2Aargs%29-instance-method" class="signature"><strong>#patch_persistentvolumeclaim_subresource</strong>(name : String, subresource : String, namespace : String = <span class="s">&quot;default&quot;</span>, **args)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#patch_rails_app%28name%3AString%2Cnamespace%2C%2A%2Akwargs%29-instance-method" class="signature"><strong>#patch_rails_app</strong>(name : String, namespace, **kwargs)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#patch_rails_app_subresource%28name%3AString%2Csubresource%3AString%2Cnamespace%3AString%3D%22default%22%2C%2A%2Aargs%29-instance-method" class="signature"><strong>#patch_rails_app_subresource</strong>(name : String, subresource : String, namespace : String = <span class="s">&quot;default&quot;</span>, **args)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#persistentvolume%28name%3AString%2Cnamespace%3AString%3D%22default%22%2Cresource_version%3AString%3D%22%22%29-instance-method" class="signature"><strong>#persistentvolume</strong>(name : String, namespace : String = <span class="s">&quot;default&quot;</span>, resource_version : String = <span class="s">&quot;&quot;</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#persistentvolumeclaim%28name%3AString%2Cnamespace%3AString%3D%22default%22%2Cresource_version%3AString%3D%22%22%29-instance-method" class="signature"><strong>#persistentvolumeclaim</strong>(name : String, namespace : String = <span class="s">&quot;default&quot;</span>, resource_version : String = <span class="s">&quot;&quot;</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#persistentvolumeclaims%28namespace%3AString%7CNil%3D%22default%22%2Clabel_selector%3Dnil%29-instance-method" class="signature"><strong>#persistentvolumeclaims</strong>(namespace : String | Nil = <span class="s">&quot;default&quot;</span>, label_selector = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#persistentvolumes%28label_selector%3Dnil%29-instance-method" class="signature"><strong>#persistentvolumes</strong>(label_selector = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#rails_app%28name%3AString%2Cnamespace%3AString%3D%22default%22%2Cresource_version%3AString%3D%22%22%29-instance-method" class="signature"><strong>#rails_app</strong>(name : String, namespace : String = <span class="s">&quot;default&quot;</span>, resource_version : String = <span class="s">&quot;&quot;</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#rails_apps%28namespace%3AString%7CNil%3D%22default%22%2Clabel_selector%3Dnil%29-instance-method" class="signature"><strong>#rails_apps</strong>(namespace : String | Nil = <span class="s">&quot;default&quot;</span>, label_selector = <span class="n">nil</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#watch_certificates%28resource_version%3D%220%22%2Ctimeout%3ATime%3A%3ASpan%3D10.minutes%2Cnamespace%3AString%7CNil%3Dnil%2Clabelslabel_selector%3AString%3D%22%22%2C%26%29-instance-method" class="signature"><strong>#watch_certificates</strong>(resource_version = <span class="s">&quot;0&quot;</span>, timeout : Time::Span = <span class="n">10</span>.minutes, namespace : String | Nil = <span class="n">nil</span>, labels label_selector : String = <span class="s">&quot;&quot;</span>, &)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#watch_configmap%28resource_version%3D%220%22%2Ctimeout%3ATime%3A%3ASpan%3D10.minutes%2Cnamespace%3AString%7CNil%3Dnil%2Clabelslabel_selector%3AString%3D%22%22%2C%26%29-instance-method" class="signature"><strong>#watch_configmap</strong>(resource_version = <span class="s">&quot;0&quot;</span>, timeout : Time::Span = <span class="n">10</span>.minutes, namespace : String | Nil = <span class="n">nil</span>, labels label_selector : String = <span class="s">&quot;&quot;</span>, &)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#watch_persistentvolumeclaims%28resource_version%3D%220%22%2Ctimeout%3ATime%3A%3ASpan%3D10.minutes%2Cnamespace%3AString%7CNil%3Dnil%2Clabelslabel_selector%3AString%3D%22%22%2C%26%29-instance-method" class="signature"><strong>#watch_persistentvolumeclaims</strong>(resource_version = <span class="s">&quot;0&quot;</span>, timeout : Time::Span = <span class="n">10</span>.minutes, namespace : String | Nil = <span class="n">nil</span>, labels label_selector : String = <span class="s">&quot;&quot;</span>, &)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#watch_persistentvolumes%28resource_version%3D%220%22%2Ctimeout%3ATime%3A%3ASpan%3D10.minutes%2Cnamespace%3AString%7CNil%3Dnil%2Clabelslabel_selector%3AString%3D%22%22%2C%26%29-instance-method" class="signature"><strong>#watch_persistentvolumes</strong>(resource_version = <span class="s">&quot;0&quot;</span>, timeout : Time::Span = <span class="n">10</span>.minutes, namespace : String | Nil = <span class="n">nil</span>, labels label_selector : String = <span class="s">&quot;&quot;</span>, &)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#watch_rails_apps%28resource_version%3D%220%22%2Ctimeout%3ATime%3A%3ASpan%3D10.minutes%2Cnamespace%3AString%7CNil%3Dnil%2Clabelslabel_selector%3AString%3D%22%22%2C%26%29-instance-method" class="signature"><strong>#watch_rails_apps</strong>(resource_version = <span class="s">&quot;0&quot;</span>, timeout : Time::Span = <span class="n">10</span>.minutes, namespace : String | Nil = <span class="n">nil</span>, labels label_selector : String = <span class="s">&quot;&quot;</span>, &)</a>
+        
+      </li>
+    
+  </ul>
+
+
+
+<div class="methods-inherited">
+  
+    
+
+
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+    
+
+
+  
+</div>
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="apply_certificate(resource:Resource(JSON::Any),spec,name:String=resource.metadata.name,namespace:String|Nil=resource.metadata.namespace,force:Bool=false,field_manager:String|Nil=nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>apply_certificate</strong>(resource : Resource(JSON::Any), spec, name : String = resource.metadata.name, namespace : String | Nil = resource.metadata.namespace, force : Bool = <span class="n">false</span>, field_manager : String | Nil = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#apply_certificate%28resource%3AResource%28JSON%3A%3AAny%29%2Cspec%2Cname%3AString%3Dresource.metadata.name%2Cnamespace%3AString%7CNil%3Dresource.metadata.namespace%2Cforce%3ABool%3Dfalse%2Cfield_manager%3AString%7CNil%3Dnil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L103" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="apply_certificate(metadata:NamedTuple|Metadata,api_version:String=&quot;cert-manager.io/v1&quot;,kind:String=&quot;Certificate&quot;,force:Bool=false,field_manager:String|Nil=nil,**kwargs)-instance-method">
+      <div class="signature">
+        
+        def <strong>apply_certificate</strong>(metadata : NamedTuple | Metadata, api_version : String = <span class="s">&quot;cert-manager.io/v1&quot;</span>, kind : String = <span class="s">&quot;Certificate&quot;</span>, force : Bool = <span class="n">false</span>, field_manager : String | Nil = <span class="n">nil</span>, **kwargs)
+
+        <a class="method-permalink" href="#apply_certificate%28metadata%3ANamedTuple%7CMetadata%2Capi_version%3AString%3D%22cert-manager.io/v1%22%2Ckind%3AString%3D%22Certificate%22%2Cforce%3ABool%3Dfalse%2Cfield_manager%3AString%7CNil%3Dnil%2C%2A%2Akwargs%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L103" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="apply_configmap(resource:Kubernetes::ConfigMap,spec,name:String=resource.metadata.name,namespace:String|Nil=resource.metadata.namespace,force:Bool=false,field_manager:String|Nil=nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>apply_configmap</strong>(resource : <a href="../Kubernetes/ConfigMap.html">Kubernetes::ConfigMap</a>, spec, name : String = resource.metadata.name, namespace : String | Nil = resource.metadata.namespace, force : Bool = <span class="n">false</span>, field_manager : String | Nil = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#apply_configmap%28resource%3AKubernetes%3A%3AConfigMap%2Cspec%2Cname%3AString%3Dresource.metadata.name%2Cnamespace%3AString%7CNil%3Dresource.metadata.namespace%2Cforce%3ABool%3Dfalse%2Cfield_manager%3AString%7CNil%3Dnil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L17" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="apply_configmap(metadata:NamedTuple,data,status=nil,api_version:String=&quot;v1&quot;,kind:String=&quot;ConfigMap&quot;,force:Bool=false,field_manager:String|Nil=nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>apply_configmap</strong>(metadata : NamedTuple, data, status = <span class="n">nil</span>, api_version : String = <span class="s">&quot;v1&quot;</span>, kind : String = <span class="s">&quot;ConfigMap&quot;</span>, force : Bool = <span class="n">false</span>, field_manager : String | Nil = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#apply_configmap%28metadata%3ANamedTuple%2Cdata%2Cstatus%3Dnil%2Capi_version%3AString%3D%22v1%22%2Ckind%3AString%3D%22ConfigMap%22%2Cforce%3ABool%3Dfalse%2Cfield_manager%3AString%7CNil%3Dnil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L26" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="apply_configmap(metadata:NamedTuple|Metadata,api_version:String=&quot;/v1&quot;,kind:String=&quot;ConfigMap&quot;,force:Bool=false,field_manager:String|Nil=nil,**kwargs)-instance-method">
+      <div class="signature">
+        
+        def <strong>apply_configmap</strong>(metadata : NamedTuple | Metadata, api_version : String = <span class="s">&quot;/v1&quot;</span>, kind : String = <span class="s">&quot;ConfigMap&quot;</span>, force : Bool = <span class="n">false</span>, field_manager : String | Nil = <span class="n">nil</span>, **kwargs)
+
+        <a class="method-permalink" href="#apply_configmap%28metadata%3ANamedTuple%7CMetadata%2Capi_version%3AString%3D%22/v1%22%2Ckind%3AString%3D%22ConfigMap%22%2Cforce%3ABool%3Dfalse%2Cfield_manager%3AString%7CNil%3Dnil%2C%2A%2Akwargs%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L17" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="apply_persistentvolume(resource:Resource(JSON::Any),spec,name:String=resource.metadata.name,force:Bool=false,field_manager:String|Nil=nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>apply_persistentvolume</strong>(resource : Resource(JSON::Any), spec, name : String = resource.metadata.name, force : Bool = <span class="n">false</span>, field_manager : String | Nil = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#apply_persistentvolume%28resource%3AResource%28JSON%3A%3AAny%29%2Cspec%2Cname%3AString%3Dresource.metadata.name%2Cforce%3ABool%3Dfalse%2Cfield_manager%3AString%7CNil%3Dnil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L111" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="apply_persistentvolume(metadata:NamedTuple|Metadata,api_version:String=&quot;/v1&quot;,kind:String=&quot;PersistentVolume&quot;,force:Bool=false,field_manager:String|Nil=nil,**kwargs)-instance-method">
+      <div class="signature">
+        
+        def <strong>apply_persistentvolume</strong>(metadata : NamedTuple | Metadata, api_version : String = <span class="s">&quot;/v1&quot;</span>, kind : String = <span class="s">&quot;PersistentVolume&quot;</span>, force : Bool = <span class="n">false</span>, field_manager : String | Nil = <span class="n">nil</span>, **kwargs)
+
+        <a class="method-permalink" href="#apply_persistentvolume%28metadata%3ANamedTuple%7CMetadata%2Capi_version%3AString%3D%22/v1%22%2Ckind%3AString%3D%22PersistentVolume%22%2Cforce%3ABool%3Dfalse%2Cfield_manager%3AString%7CNil%3Dnil%2C%2A%2Akwargs%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L111" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="apply_persistentvolumeclaim(resource:Resource(JSON::Any),spec,name:String=resource.metadata.name,namespace:String|Nil=resource.metadata.namespace,force:Bool=false,field_manager:String|Nil=nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>apply_persistentvolumeclaim</strong>(resource : Resource(JSON::Any), spec, name : String = resource.metadata.name, namespace : String | Nil = resource.metadata.namespace, force : Bool = <span class="n">false</span>, field_manager : String | Nil = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#apply_persistentvolumeclaim%28resource%3AResource%28JSON%3A%3AAny%29%2Cspec%2Cname%3AString%3Dresource.metadata.name%2Cnamespace%3AString%7CNil%3Dresource.metadata.namespace%2Cforce%3ABool%3Dfalse%2Cfield_manager%3AString%7CNil%3Dnil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L119" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="apply_persistentvolumeclaim(metadata:NamedTuple|Metadata,api_version:String=&quot;/v1&quot;,kind:String=&quot;PersistentVolumeClaim&quot;,force:Bool=false,field_manager:String|Nil=nil,**kwargs)-instance-method">
+      <div class="signature">
+        
+        def <strong>apply_persistentvolumeclaim</strong>(metadata : NamedTuple | Metadata, api_version : String = <span class="s">&quot;/v1&quot;</span>, kind : String = <span class="s">&quot;PersistentVolumeClaim&quot;</span>, force : Bool = <span class="n">false</span>, field_manager : String | Nil = <span class="n">nil</span>, **kwargs)
+
+        <a class="method-permalink" href="#apply_persistentvolumeclaim%28metadata%3ANamedTuple%7CMetadata%2Capi_version%3AString%3D%22/v1%22%2Ckind%3AString%3D%22PersistentVolumeClaim%22%2Cforce%3ABool%3Dfalse%2Cfield_manager%3AString%7CNil%3Dnil%2C%2A%2Akwargs%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L119" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="apply_rails_app(resource:Kubernetes::Resource(RailsApp),spec,name:String=resource.metadata.name,namespace:String|Nil=resource.metadata.namespace,force:Bool=false,field_manager:String|Nil=nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>apply_rails_app</strong>(resource : Kubernetes::Resource(<a href="../RailsApp.html">RailsApp</a>), spec, name : String = resource.metadata.name, namespace : String | Nil = resource.metadata.namespace, force : Bool = <span class="n">false</span>, field_manager : String | Nil = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#apply_rails_app%28resource%3AKubernetes%3A%3AResource%28RailsApp%29%2Cspec%2Cname%3AString%3Dresource.metadata.name%2Cnamespace%3AString%7CNil%3Dresource.metadata.namespace%2Cforce%3ABool%3Dfalse%2Cfield_manager%3AString%7CNil%3Dnil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="apply_rails_app(metadata:NamedTuple|Metadata,api_version:String=&quot;jgaskins.dev/v1beta1&quot;,kind:String=&quot;RailsApp&quot;,force:Bool=false,field_manager:String|Nil=nil,**kwargs)-instance-method">
+      <div class="signature">
+        
+        def <strong>apply_rails_app</strong>(metadata : NamedTuple | Metadata, api_version : String = <span class="s">&quot;jgaskins.dev/v1beta1&quot;</span>, kind : String = <span class="s">&quot;RailsApp&quot;</span>, force : Bool = <span class="n">false</span>, field_manager : String | Nil = <span class="n">nil</span>, **kwargs)
+
+        <a class="method-permalink" href="#apply_rails_app%28metadata%3ANamedTuple%7CMetadata%2Capi_version%3AString%3D%22jgaskins.dev/v1beta1%22%2Ckind%3AString%3D%22RailsApp%22%2Cforce%3ABool%3Dfalse%2Cfield_manager%3AString%7CNil%3Dnil%2C%2A%2Akwargs%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="certificate(name:String,namespace:String=&quot;default&quot;,resource_version:String=&quot;&quot;)-instance-method">
+      <div class="signature">
+        
+        def <strong>certificate</strong>(name : String, namespace : String = <span class="s">&quot;default&quot;</span>, resource_version : String = <span class="s">&quot;&quot;</span>)
+
+        <a class="method-permalink" href="#certificate%28name%3AString%2Cnamespace%3AString%3D%22default%22%2Cresource_version%3AString%3D%22%22%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L103" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="certificates(namespace:String|Nil=&quot;default&quot;,label_selector=nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>certificates</strong>(namespace : String | Nil = <span class="s">&quot;default&quot;</span>, label_selector = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#certificates%28namespace%3AString%7CNil%3D%22default%22%2Clabel_selector%3Dnil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L103" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="configmap(name:String,namespace:String=&quot;default&quot;,resource_version:String=&quot;&quot;)-instance-method">
+      <div class="signature">
+        
+        def <strong>configmap</strong>(name : String, namespace : String = <span class="s">&quot;default&quot;</span>, resource_version : String = <span class="s">&quot;&quot;</span>)
+
+        <a class="method-permalink" href="#configmap%28name%3AString%2Cnamespace%3AString%3D%22default%22%2Cresource_version%3AString%3D%22%22%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L17" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="configmap(namespace:String|Nil=&quot;default&quot;,label_selector=nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>configmap</strong>(namespace : String | Nil = <span class="s">&quot;default&quot;</span>, label_selector = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#configmap%28namespace%3AString%7CNil%3D%22default%22%2Clabel_selector%3Dnil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L17" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="delete_certificate(resource:Resource(JSON::Any))-instance-method">
+      <div class="signature">
+        
+        def <strong>delete_certificate</strong>(resource : Resource(JSON::Any))
+
+        <a class="method-permalink" href="#delete_certificate%28resource%3AResource%28JSON%3A%3AAny%29%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L103" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="delete_certificate(name:String,namespace:String=&quot;default&quot;)-instance-method">
+      <div class="signature">
+        
+        def <strong>delete_certificate</strong>(name : String, namespace : String = <span class="s">&quot;default&quot;</span>)
+
+        <a class="method-permalink" href="#delete_certificate%28name%3AString%2Cnamespace%3AString%3D%22default%22%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L103" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="delete_configmap(resource:Kubernetes::ConfigMap)-instance-method">
+      <div class="signature">
+        
+        def <strong>delete_configmap</strong>(resource : <a href="../Kubernetes/ConfigMap.html">Kubernetes::ConfigMap</a>)
+
+        <a class="method-permalink" href="#delete_configmap%28resource%3AKubernetes%3A%3AConfigMap%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L17" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="delete_configmap(name:String,namespace:String=&quot;default&quot;)-instance-method">
+      <div class="signature">
+        
+        def <strong>delete_configmap</strong>(name : String, namespace : String = <span class="s">&quot;default&quot;</span>)
+
+        <a class="method-permalink" href="#delete_configmap%28name%3AString%2Cnamespace%3AString%3D%22default%22%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L17" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="delete_persistentvolume(resource:Resource(JSON::Any))-instance-method">
+      <div class="signature">
+        
+        def <strong>delete_persistentvolume</strong>(resource : Resource(JSON::Any))
+
+        <a class="method-permalink" href="#delete_persistentvolume%28resource%3AResource%28JSON%3A%3AAny%29%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L111" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="delete_persistentvolume(name:String)-instance-method">
+      <div class="signature">
+        
+        def <strong>delete_persistentvolume</strong>(name : String)
+
+        <a class="method-permalink" href="#delete_persistentvolume%28name%3AString%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L111" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="delete_persistentvolumeclaim(resource:Resource(JSON::Any))-instance-method">
+      <div class="signature">
+        
+        def <strong>delete_persistentvolumeclaim</strong>(resource : Resource(JSON::Any))
+
+        <a class="method-permalink" href="#delete_persistentvolumeclaim%28resource%3AResource%28JSON%3A%3AAny%29%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L119" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="delete_persistentvolumeclaim(name:String,namespace:String=&quot;default&quot;)-instance-method">
+      <div class="signature">
+        
+        def <strong>delete_persistentvolumeclaim</strong>(name : String, namespace : String = <span class="s">&quot;default&quot;</span>)
+
+        <a class="method-permalink" href="#delete_persistentvolumeclaim%28name%3AString%2Cnamespace%3AString%3D%22default%22%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L119" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="delete_rails_app(resource:Kubernetes::Resource(RailsApp))-instance-method">
+      <div class="signature">
+        
+        def <strong>delete_rails_app</strong>(resource : Kubernetes::Resource(<a href="../RailsApp.html">RailsApp</a>))
+
+        <a class="method-permalink" href="#delete_rails_app%28resource%3AKubernetes%3A%3AResource%28RailsApp%29%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="delete_rails_app(name:String,namespace:String=&quot;default&quot;)-instance-method">
+      <div class="signature">
+        
+        def <strong>delete_rails_app</strong>(name : String, namespace : String = <span class="s">&quot;default&quot;</span>)
+
+        <a class="method-permalink" href="#delete_rails_app%28name%3AString%2Cnamespace%3AString%3D%22default%22%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="patch_certificate(name:String,namespace,**kwargs)-instance-method">
+      <div class="signature">
+        
+        def <strong>patch_certificate</strong>(name : String, namespace, **kwargs)
+
+        <a class="method-permalink" href="#patch_certificate%28name%3AString%2Cnamespace%2C%2A%2Akwargs%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L103" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="patch_certificate_subresource(name:String,subresource:String,namespace:String=&quot;default&quot;,**args)-instance-method">
+      <div class="signature">
+        
+        def <strong>patch_certificate_subresource</strong>(name : String, subresource : String, namespace : String = <span class="s">&quot;default&quot;</span>, **args)
+
+        <a class="method-permalink" href="#patch_certificate_subresource%28name%3AString%2Csubresource%3AString%2Cnamespace%3AString%3D%22default%22%2C%2A%2Aargs%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L103" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="patch_configmap(name:String,namespace,**kwargs)-instance-method">
+      <div class="signature">
+        
+        def <strong>patch_configmap</strong>(name : String, namespace, **kwargs)
+
+        <a class="method-permalink" href="#patch_configmap%28name%3AString%2Cnamespace%2C%2A%2Akwargs%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L17" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="patch_configmap_subresource(name:String,subresource:String,namespace:String=&quot;default&quot;,**args)-instance-method">
+      <div class="signature">
+        
+        def <strong>patch_configmap_subresource</strong>(name : String, subresource : String, namespace : String = <span class="s">&quot;default&quot;</span>, **args)
+
+        <a class="method-permalink" href="#patch_configmap_subresource%28name%3AString%2Csubresource%3AString%2Cnamespace%3AString%3D%22default%22%2C%2A%2Aargs%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L17" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="patch_persistentvolume(name:String,**kwargs)-instance-method">
+      <div class="signature">
+        
+        def <strong>patch_persistentvolume</strong>(name : String, **kwargs)
+
+        <a class="method-permalink" href="#patch_persistentvolume%28name%3AString%2C%2A%2Akwargs%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L111" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="patch_persistentvolume_subresource(name:String,subresource:String,**args)-instance-method">
+      <div class="signature">
+        
+        def <strong>patch_persistentvolume_subresource</strong>(name : String, subresource : String, **args)
+
+        <a class="method-permalink" href="#patch_persistentvolume_subresource%28name%3AString%2Csubresource%3AString%2C%2A%2Aargs%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L111" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="patch_persistentvolumeclaim(name:String,namespace,**kwargs)-instance-method">
+      <div class="signature">
+        
+        def <strong>patch_persistentvolumeclaim</strong>(name : String, namespace, **kwargs)
+
+        <a class="method-permalink" href="#patch_persistentvolumeclaim%28name%3AString%2Cnamespace%2C%2A%2Akwargs%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L119" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="patch_persistentvolumeclaim_subresource(name:String,subresource:String,namespace:String=&quot;default&quot;,**args)-instance-method">
+      <div class="signature">
+        
+        def <strong>patch_persistentvolumeclaim_subresource</strong>(name : String, subresource : String, namespace : String = <span class="s">&quot;default&quot;</span>, **args)
+
+        <a class="method-permalink" href="#patch_persistentvolumeclaim_subresource%28name%3AString%2Csubresource%3AString%2Cnamespace%3AString%3D%22default%22%2C%2A%2Aargs%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L119" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="patch_rails_app(name:String,namespace,**kwargs)-instance-method">
+      <div class="signature">
+        
+        def <strong>patch_rails_app</strong>(name : String, namespace, **kwargs)
+
+        <a class="method-permalink" href="#patch_rails_app%28name%3AString%2Cnamespace%2C%2A%2Akwargs%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="patch_rails_app_subresource(name:String,subresource:String,namespace:String=&quot;default&quot;,**args)-instance-method">
+      <div class="signature">
+        
+        def <strong>patch_rails_app_subresource</strong>(name : String, subresource : String, namespace : String = <span class="s">&quot;default&quot;</span>, **args)
+
+        <a class="method-permalink" href="#patch_rails_app_subresource%28name%3AString%2Csubresource%3AString%2Cnamespace%3AString%3D%22default%22%2C%2A%2Aargs%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="persistentvolume(name:String,namespace:String=&quot;default&quot;,resource_version:String=&quot;&quot;)-instance-method">
+      <div class="signature">
+        
+        def <strong>persistentvolume</strong>(name : String, namespace : String = <span class="s">&quot;default&quot;</span>, resource_version : String = <span class="s">&quot;&quot;</span>)
+
+        <a class="method-permalink" href="#persistentvolume%28name%3AString%2Cnamespace%3AString%3D%22default%22%2Cresource_version%3AString%3D%22%22%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L111" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="persistentvolumeclaim(name:String,namespace:String=&quot;default&quot;,resource_version:String=&quot;&quot;)-instance-method">
+      <div class="signature">
+        
+        def <strong>persistentvolumeclaim</strong>(name : String, namespace : String = <span class="s">&quot;default&quot;</span>, resource_version : String = <span class="s">&quot;&quot;</span>)
+
+        <a class="method-permalink" href="#persistentvolumeclaim%28name%3AString%2Cnamespace%3AString%3D%22default%22%2Cresource_version%3AString%3D%22%22%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L119" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="persistentvolumeclaims(namespace:String|Nil=&quot;default&quot;,label_selector=nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>persistentvolumeclaims</strong>(namespace : String | Nil = <span class="s">&quot;default&quot;</span>, label_selector = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#persistentvolumeclaims%28namespace%3AString%7CNil%3D%22default%22%2Clabel_selector%3Dnil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L119" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="persistentvolumes(label_selector=nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>persistentvolumes</strong>(label_selector = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#persistentvolumes%28label_selector%3Dnil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L111" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="rails_app(name:String,namespace:String=&quot;default&quot;,resource_version:String=&quot;&quot;)-instance-method">
+      <div class="signature">
+        
+        def <strong>rails_app</strong>(name : String, namespace : String = <span class="s">&quot;default&quot;</span>, resource_version : String = <span class="s">&quot;&quot;</span>)
+
+        <a class="method-permalink" href="#rails_app%28name%3AString%2Cnamespace%3AString%3D%22default%22%2Cresource_version%3AString%3D%22%22%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="rails_apps(namespace:String|Nil=&quot;default&quot;,label_selector=nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>rails_apps</strong>(namespace : String | Nil = <span class="s">&quot;default&quot;</span>, label_selector = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#rails_apps%28namespace%3AString%7CNil%3D%22default%22%2Clabel_selector%3Dnil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="watch_certificates(resource_version=&quot;0&quot;,timeout:Time::Span=10.minutes,namespace:String|Nil=nil,labelslabel_selector:String=&quot;&quot;,&amp;)-instance-method">
+      <div class="signature">
+        
+        def <strong>watch_certificates</strong>(resource_version = <span class="s">&quot;0&quot;</span>, timeout : Time::Span = <span class="n">10</span>.minutes, namespace : String | Nil = <span class="n">nil</span>, labels label_selector : String = <span class="s">&quot;&quot;</span>, &)
+
+        <a class="method-permalink" href="#watch_certificates%28resource_version%3D%220%22%2Ctimeout%3ATime%3A%3ASpan%3D10.minutes%2Cnamespace%3AString%7CNil%3Dnil%2Clabelslabel_selector%3AString%3D%22%22%2C%26%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L103" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="watch_configmap(resource_version=&quot;0&quot;,timeout:Time::Span=10.minutes,namespace:String|Nil=nil,labelslabel_selector:String=&quot;&quot;,&amp;)-instance-method">
+      <div class="signature">
+        
+        def <strong>watch_configmap</strong>(resource_version = <span class="s">&quot;0&quot;</span>, timeout : Time::Span = <span class="n">10</span>.minutes, namespace : String | Nil = <span class="n">nil</span>, labels label_selector : String = <span class="s">&quot;&quot;</span>, &)
+
+        <a class="method-permalink" href="#watch_configmap%28resource_version%3D%220%22%2Ctimeout%3ATime%3A%3ASpan%3D10.minutes%2Cnamespace%3AString%7CNil%3Dnil%2Clabelslabel_selector%3AString%3D%22%22%2C%26%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L17" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="watch_persistentvolumeclaims(resource_version=&quot;0&quot;,timeout:Time::Span=10.minutes,namespace:String|Nil=nil,labelslabel_selector:String=&quot;&quot;,&amp;)-instance-method">
+      <div class="signature">
+        
+        def <strong>watch_persistentvolumeclaims</strong>(resource_version = <span class="s">&quot;0&quot;</span>, timeout : Time::Span = <span class="n">10</span>.minutes, namespace : String | Nil = <span class="n">nil</span>, labels label_selector : String = <span class="s">&quot;&quot;</span>, &)
+
+        <a class="method-permalink" href="#watch_persistentvolumeclaims%28resource_version%3D%220%22%2Ctimeout%3ATime%3A%3ASpan%3D10.minutes%2Cnamespace%3AString%7CNil%3Dnil%2Clabelslabel_selector%3AString%3D%22%22%2C%26%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L119" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="watch_persistentvolumes(resource_version=&quot;0&quot;,timeout:Time::Span=10.minutes,namespace:String|Nil=nil,labelslabel_selector:String=&quot;&quot;,&amp;)-instance-method">
+      <div class="signature">
+        
+        def <strong>watch_persistentvolumes</strong>(resource_version = <span class="s">&quot;0&quot;</span>, timeout : Time::Span = <span class="n">10</span>.minutes, namespace : String | Nil = <span class="n">nil</span>, labels label_selector : String = <span class="s">&quot;&quot;</span>, &)
+
+        <a class="method-permalink" href="#watch_persistentvolumes%28resource_version%3D%220%22%2Ctimeout%3ATime%3A%3ASpan%3D10.minutes%2Cnamespace%3AString%7CNil%3Dnil%2Clabelslabel_selector%3AString%3D%22%22%2C%26%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/jgaskins/rails_app_operator/blob/main/src/rails_app_operator.cr#L111" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="watch_rails_apps(resource_version=&quot;0&quot;,timeout:Time::Span=10.minutes,namespace:String|Nil=nil,labelslabel_selector:String=&quot;&quot;,&amp;)-instance-method">
+      <div class="signature">
+        
+        def <strong>watch_rails_apps</strong>(resource_version = <span class="s">&quot;0&quot;</span>, timeout : Time::Span = <span class="n">10</span>.minutes, namespace : String | Nil = <span class="n">nil</span>, labels label_selector : String = <span class="s">&quot;&quot;</span>, &)
+
+        <a class="method-permalink" href="#watch_rails_apps%28resource_version%3D%220%22%2Ctimeout%3ATime%3A%3ASpan%3D10.minutes%2Cnamespace%3AString%7CNil%3Dnil%2Clabelslabel_selector%3AString%3D%22%22%2C%26%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+
+
+</div>
+
+</body>
+</html>

@@ -4,6 +4,7 @@ require "log"
 LOG = Log.for("rails-app-operator")
 Log.setup_from_env default_level: :info
 
+# :nodoc:
 # TODO: Upstream this into the Kubernetes shard
 module Kubernetes
   struct ConfigMap
