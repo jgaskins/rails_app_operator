@@ -64,7 +64,7 @@ spec:
                   description: "The image tag to use by default for all entrypoints in this `RailsApp`"
                 image_pull_policy:
                   type: string
-                  enum: [IfNotPresent, Always]
+                  # enum: [IfNotPresent, Always]
                   default: "IfNotPresent"
                   description: "Describes how images are pulled: `Always` pulls a fresh container image each time and `IfNotPresent` will pull a container image once and keep it cached. Use `Always` if your container images use mutable tags, such as `latest`."
                 image_pull_secrets:
@@ -297,10 +297,10 @@ spec:
                             path: /
                           ```
                         default: "Prefix"
-                        enum:
-                        - Prefix
-                        - Exact
-                        - ImplementationSpecific
+                        # enum:
+                        # - Prefix
+                        # - Exact
+                        # - ImplementationSpecific
                       replicas:
                         type: integer
                         description: |
