@@ -366,10 +366,25 @@ def deploy(k8s : Kubernetes::Client, resource : Kubernetes::Resource(RailsApp))
 
       if domains = entrypoint.domains
         domains.each do |domain|
-          set_domain k8s, namespace, name, entrypoint, entrypoint_name, domain, port
+          item_name = "#{entrypoint_name}-#{domain.tr(".", "-")}"
+          set_domain k8s,
+            namespace: namespace,
+            name: name,
+            entrypoint: entrypoint,
+            entrypoint_name: entrypoint_name,
+            ingress_name: item_name,
+            domain: domain,
+            port: port
         end
       elsif domain = entrypoint.domain
-        set_domain k8s, namespace, name, entrypoint, entrypoint_name, domain, port
+        set_domain k8s,
+          namespace: namespace,
+          name: name,
+          entrypoint: entrypoint,
+          entrypoint_name: entrypoint_name,
+          ingress_name: name,
+          domain: domain,
+          port: port
       end
     end
   end
@@ -453,10 +468,11 @@ def set_domain(
   name : String,
   entrypoint : RailsApp::Entrypoints,
   entrypoint_name : String,
+  ingress_name : String,
   domain : String,
   port : Int,
 )
-  secret_name = "#{entrypoint_name}-#{domain.tr(".", "-")}-tls"
+  secret_name = "#{ingress_name}-tls"
   info k8s.apply_certificate(
     metadata: {
       name:      secret_name,
@@ -474,7 +490,7 @@ def set_domain(
 
   info k8s.apply_ingress(
     metadata: {
-      name:        entrypoint_name,
+      name:        ingress_name,
       namespace:   namespace,
       labels:      {app: name},
       annotations: entrypoint.ingress.try(&.annotations),
