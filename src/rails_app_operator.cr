@@ -382,7 +382,7 @@ def deploy(k8s : Kubernetes::Client, resource : Kubernetes::Resource(RailsApp))
           name: name,
           entrypoint: entrypoint,
           entrypoint_name: entrypoint_name,
-          ingress_name: name,
+          ingress_name: entrypoint_name,
           domain: domain,
           port: port
       end
