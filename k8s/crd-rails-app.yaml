@@ -274,7 +274,18 @@ spec:
                       domain:
                         type: string
                         description: |
-                          The domain your app should be accessible on. This will provision `Ingress` and `Certificate` resources so that this entrypoint will be reachable via the public internet. Without this property, it will only be accessible via plaintext inside the cluster.
+                          The domain your app should be accessible on. This will provision `Ingress` and `Certificate` resources so that this entrypoint will be reachable via the public internet. Without this property or `domains`, it will only be accessible via plaintext inside the cluster.
+
+                          If `domain` and `domains` are both provided, `domains` takes precedence.
+                        nullable: true
+                      domains:
+                        type: array
+                        description: |
+                          The domains your app should be accessible on. This will provision `Ingress` and `Certificate` resources so that this entrypoint will be reachable via the public internet. Without this property or `domain`, it will only be accessible via plaintext inside the cluster.
+
+                          If `domain` and `domains` are both provided, `domains` takes precedence.
+                        items:
+                          type: string
                         nullable: true
                       path:
                         type: string

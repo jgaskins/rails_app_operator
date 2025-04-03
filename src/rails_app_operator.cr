@@ -364,59 +364,12 @@ def deploy(k8s : Kubernetes::Client, resource : Kubernetes::Resource(RailsApp))
         force: true,
       )
 
-      if domain = entrypoint.domain
-        secret_name = "#{entrypoint_name}-tls"
-        info k8s.apply_certificate(
-          metadata: {
-            name:      secret_name,
-            namespace: namespace,
-          },
-          spec: {
-            secretName: secret_name,
-            dnsNames:   [domain],
-            issuerRef:  {
-              name: ENV.fetch("CERT_ISSUER_NAME", "letsencrypt"),
-              kind: ENV.fetch("CERT_ISSUER_KIND", "ClusterIssuer"),
-            },
-          },
-        )
-
-        info k8s.apply_ingress(
-          metadata: {
-            name:        entrypoint_name,
-            namespace:   namespace,
-            labels:      {app: name},
-            annotations: entrypoint.ingress.try(&.annotations),
-          },
-          spec: {
-            tls: [
-              {
-                hosts:      [domain],
-                secretName: secret_name,
-              },
-            ],
-            ingressClassName: ENV["INGRESS_CLASS_NAME"]? || "nginx",
-            rules:            [
-              {
-                host: domain,
-                http: {
-                  paths: [
-                    {
-                      backend: {
-                        service: {
-                          name: entrypoint_name,
-                          port: {number: port},
-                        },
-                      },
-                      path:     entrypoint.path,
-                      pathType: entrypoint.path_type,
-                    },
-                  ],
-                },
-              },
-            ],
-          },
-        )
+      if domains = entrypoint.domains
+        domains.each do |domain|
+          set_domain k8s, namespace, name, entrypoint, entrypoint_name, domain, port
+        end
+      elsif domain = entrypoint.domain
+        set_domain k8s, namespace, name, entrypoint, entrypoint_name, domain, port
       end
     end
   end
@@ -492,6 +445,69 @@ def pod_spec(
       end
     },
   }
+end
+
+def set_domain(
+  k8s : Kubernetes::Client,
+  namespace : String,
+  name : String,
+  entrypoint : RailsApp::Entrypoints,
+  entrypoint_name : String,
+  domain : String,
+  port : Int,
+)
+  secret_name = "#{entrypoint_name}-#{domain.tr(".", "-")}-tls"
+  info k8s.apply_certificate(
+    metadata: {
+      name:      secret_name,
+      namespace: namespace,
+    },
+    spec: {
+      secretName: secret_name,
+      dnsNames:   [domain],
+      issuerRef:  {
+        name: ENV.fetch("CERT_ISSUER_NAME", "letsencrypt"),
+        kind: ENV.fetch("CERT_ISSUER_KIND", "ClusterIssuer"),
+      },
+    },
+  )
+
+  info k8s.apply_ingress(
+    metadata: {
+      name:        entrypoint_name,
+      namespace:   namespace,
+      labels:      {app: name},
+      annotations: entrypoint.ingress.try(&.annotations),
+    },
+    spec: {
+      tls: [
+        {
+          hosts:      [domain],
+          secretName: secret_name,
+        },
+      ],
+      ingressClassName: ENV["INGRESS_CLASS_NAME"]? || "nginx",
+      rules:            [
+        {
+          host: domain,
+          http: {
+            paths: [
+              {
+                backend: {
+                  service: {
+                    name: entrypoint_name,
+                    port: {number: port},
+                  },
+                },
+                path:     entrypoint.path,
+                pathType: entrypoint.path_type,
+              },
+            ],
+          },
+        },
+      ],
+    },
+  )
 end
 
 def info(result)
