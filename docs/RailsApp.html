@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Crystal Docs 1.10.1">
-<meta name="crystal_docs.project_version" content="main-dev">
+<meta name="crystal_docs.project_version" content="main">
 <meta name="crystal_docs.project_name" content="rails_app_operator">
 
 
@@ -14,7 +14,7 @@
 <script type="text/javascript" src="js/doc.js"></script>
 
   <meta name="repository-name" content="rails_app_operator">
-  <title>RailsApp - rails_app_operator main-dev</title>
+  <title>RailsApp - rails_app_operator main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "";
   </script>
@@ -45,7 +45,7 @@
       </h1>
 
       <span class="project-version">
-        main-dev
+        main
       </span>
     </div>
   </div>
@@ -292,11 +292,6 @@
       
     </li>
   
-  <li class=" " data-id="rails_app_operator/RailsApp/Entrypoints/PathType" data-name="railsapp::entrypoints::pathtype">
-      <a href="RailsApp/Entrypoints/PathType.html">PathType</a>
-      
-    </li>
-  
   <li class="parent " data-id="rails_app_operator/RailsApp/Entrypoints/Resources" data-name="railsapp::entrypoints::resources">
       <a href="RailsApp/Entrypoints/Resources.html">Resources</a>
       
@@ -374,11 +369,6 @@
   
 </ul>
 
-      
-    </li>
-  
-  <li class=" " data-id="rails_app_operator/RailsApp/ImagePullPolicy" data-name="railsapp::imagepullpolicy">
-      <a href="RailsApp/ImagePullPolicy.html">ImagePullPolicy</a>
       
     </li>
   
@@ -528,7 +518,7 @@ spec:
       </li>
     
       <li class="entry-summary">
-        <a href="#new%28%2A%2Cimage%3AString%2Cimage_pull_policy%3ARailsApp%3A%3AImagePullPolicy%3D%22IfNotPresent%22%2Cimage_pull_secrets%3AArray%28String%29%3DArray%28String%29.new%2Cenv_from%3AArray%28RailsApp%3A%3AEnvFrom%29%3DArray%28EnvFrom%29.new%2Cenv%3AArray%28RailsApp%3A%3AEnv%29%3DArray%28Env%29.new%2Cnode_selector%3AHash%28String%2CJSON%3A%3AAny%29%3D%7B%7DofString%3D%3EJSON%3A%3AAny%2Cdirectories%3AArray%28RailsApp%3A%3ADirectories%29%3DArray%28Directories%29.new%2Cannotations%3AHash%28String%2CJSON%3A%3AAny%29%3D%7B%7DofString%3D%3EJSON%3A%3AAny%2Centrypoints%3AArray%28RailsApp%3A%3AEntrypoints%29%2Cbefore_create%3ARailsApp%3A%3ABeforeCreate%2Cbefore_update%3ARailsApp%3A%3ABeforeUpdate%2Cservice_account%3ANil%7CString%3Dnil%29-class-method" class="signature"><strong>.new</strong>(*, image : String, image_pull_policy : RailsApp::ImagePullPolicy = <span class="s">&quot;IfNotPresent&quot;</span>, image_pull_secrets : Array(String) = <span class="t">Array</span>(<span class="t">String</span>).new, env_from : Array(RailsApp::EnvFrom) = <span class="t">Array</span>(<span class="t">EnvFrom</span>).new, env : Array(RailsApp::Env) = <span class="t">Array</span>(<span class="t">Env</span>).new, node_selector : Hash(String, JSON::Any) = {} <span class="k">of</span> <span class="t">String</span> <span class="o">=&gt;</span> <span class="t">JSON</span><span class="t">::</span><span class="t">Any</span>, directories : Array(RailsApp::Directories) = <span class="t">Array</span>(<span class="t">Directories</span>).new, annotations : Hash(String, JSON::Any) = {} <span class="k">of</span> <span class="t">String</span> <span class="o">=&gt;</span> <span class="t">JSON</span><span class="t">::</span><span class="t">Any</span>, entrypoints : Array(RailsApp::Entrypoints), before_create : RailsApp::BeforeCreate, before_update : RailsApp::BeforeUpdate, service_account : Nil | String = <span class="n">nil</span>)</a>
+        <a href="#new%28%2A%2Cimage%3AString%2Cimage_pull_policy%3AString%3D%22IfNotPresent%22%2Cimage_pull_secrets%3AArray%28String%29%3DArray%28String%29.new%2Cenv_from%3AArray%28RailsApp%3A%3AEnvFrom%29%3DArray%28EnvFrom%29.new%2Cenv%3AArray%28RailsApp%3A%3AEnv%29%3DArray%28Env%29.new%2Cnode_selector%3AHash%28String%2CJSON%3A%3AAny%29%3D%7B%7DofString%3D%3EJSON%3A%3AAny%2Cdirectories%3AArray%28RailsApp%3A%3ADirectories%29%3DArray%28Directories%29.new%2Cannotations%3AHash%28String%2CJSON%3A%3AAny%29%3D%7B%7DofString%3D%3EJSON%3A%3AAny%2Centrypoints%3AArray%28RailsApp%3A%3AEntrypoints%29%2Cbefore_create%3ARailsApp%3A%3ABeforeCreate%2Cbefore_update%3ARailsApp%3A%3ABeforeUpdate%2Cservice_account%3ANil%7CString%3Dnil%29-class-method" class="signature"><strong>.new</strong>(*, image : String, image_pull_policy : String = <span class="s">&quot;IfNotPresent&quot;</span>, image_pull_secrets : Array(String) = <span class="t">Array</span>(<span class="t">String</span>).new, env_from : Array(RailsApp::EnvFrom) = <span class="t">Array</span>(<span class="t">EnvFrom</span>).new, env : Array(RailsApp::Env) = <span class="t">Array</span>(<span class="t">Env</span>).new, node_selector : Hash(String, JSON::Any) = {} <span class="k">of</span> <span class="t">String</span> <span class="o">=&gt;</span> <span class="t">JSON</span><span class="t">::</span><span class="t">Any</span>, directories : Array(RailsApp::Directories) = <span class="t">Array</span>(<span class="t">Directories</span>).new, annotations : Hash(String, JSON::Any) = {} <span class="k">of</span> <span class="t">String</span> <span class="o">=&gt;</span> <span class="t">JSON</span><span class="t">::</span><span class="t">Any</span>, entrypoints : Array(RailsApp::Entrypoints), before_create : RailsApp::BeforeCreate, before_update : RailsApp::BeforeUpdate, service_account : Nil | String = <span class="n">nil</span>)</a>
         
       </li>
     
@@ -605,7 +595,7 @@ spec:
       </li>
     
       <li class="entry-summary">
-        <a href="#image_pull_policy%3AImagePullPolicy-instance-method" class="signature"><strong>#image_pull_policy</strong> : ImagePullPolicy</a>
+        <a href="#image_pull_policy%3AString-instance-method" class="signature"><strong>#image_pull_policy</strong> : String</a>
         
           <div class="summary"><p>Describes how images are pulled: <code>Always</code> pulls a fresh container image each time and <code>IfNotPresent</code> will pull a container image once and keep it cached.</p></div>
         
@@ -756,12 +746,12 @@ spec:
       </div>
     </div>
   
-    <div class="entry-detail" id="new(*,image:String,image_pull_policy:RailsApp::ImagePullPolicy=&quot;IfNotPresent&quot;,image_pull_secrets:Array(String)=Array(String).new,env_from:Array(RailsApp::EnvFrom)=Array(EnvFrom).new,env:Array(RailsApp::Env)=Array(Env).new,node_selector:Hash(String,JSON::Any)={}ofString=&gt;JSON::Any,directories:Array(RailsApp::Directories)=Array(Directories).new,annotations:Hash(String,JSON::Any)={}ofString=&gt;JSON::Any,entrypoints:Array(RailsApp::Entrypoints),before_create:RailsApp::BeforeCreate,before_update:RailsApp::BeforeUpdate,service_account:Nil|String=nil)-class-method">
+    <div class="entry-detail" id="new(*,image:String,image_pull_policy:String=&quot;IfNotPresent&quot;,image_pull_secrets:Array(String)=Array(String).new,env_from:Array(RailsApp::EnvFrom)=Array(EnvFrom).new,env:Array(RailsApp::Env)=Array(Env).new,node_selector:Hash(String,JSON::Any)={}ofString=&gt;JSON::Any,directories:Array(RailsApp::Directories)=Array(Directories).new,annotations:Hash(String,JSON::Any)={}ofString=&gt;JSON::Any,entrypoints:Array(RailsApp::Entrypoints),before_create:RailsApp::BeforeCreate,before_update:RailsApp::BeforeUpdate,service_account:Nil|String=nil)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(*, image : String, image_pull_policy : <a href="RailsApp/ImagePullPolicy.html">RailsApp::ImagePullPolicy</a> = <span class="s">&quot;IfNotPresent&quot;</span>, image_pull_secrets : Array(String) = <span class="t">Array</span>(<span class="t">String</span>).new, env_from : Array(<a href="RailsApp/EnvFrom.html">RailsApp::EnvFrom</a>) = <span class="t">Array</span>(<span class="t">EnvFrom</span>).new, env : Array(<a href="RailsApp/Env.html">RailsApp::Env</a>) = <span class="t">Array</span>(<span class="t">Env</span>).new, node_selector : Hash(String, JSON::Any) = {} <span class="k">of</span> <span class="t">String</span> <span class="o">=&gt;</span> <span class="t">JSON</span><span class="t">::</span><span class="t">Any</span>, directories : Array(<a href="RailsApp/Directories.html">RailsApp::Directories</a>) = <span class="t">Array</span>(<span class="t">Directories</span>).new, annotations : Hash(String, JSON::Any) = {} <span class="k">of</span> <span class="t">String</span> <span class="o">=&gt;</span> <span class="t">JSON</span><span class="t">::</span><span class="t">Any</span>, entrypoints : Array(<a href="RailsApp/Entrypoints.html">RailsApp::Entrypoints</a>), before_create : <a href="RailsApp/BeforeCreate.html">RailsApp::BeforeCreate</a>, before_update : <a href="RailsApp/BeforeUpdate.html">RailsApp::BeforeUpdate</a>, service_account : Nil | String = <span class="n">nil</span>)
+        def self.<strong>new</strong>(*, image : String, image_pull_policy : String = <span class="s">&quot;IfNotPresent&quot;</span>, image_pull_secrets : Array(String) = <span class="t">Array</span>(<span class="t">String</span>).new, env_from : Array(<a href="RailsApp/EnvFrom.html">RailsApp::EnvFrom</a>) = <span class="t">Array</span>(<span class="t">EnvFrom</span>).new, env : Array(<a href="RailsApp/Env.html">RailsApp::Env</a>) = <span class="t">Array</span>(<span class="t">Env</span>).new, node_selector : Hash(String, JSON::Any) = {} <span class="k">of</span> <span class="t">String</span> <span class="o">=&gt;</span> <span class="t">JSON</span><span class="t">::</span><span class="t">Any</span>, directories : Array(<a href="RailsApp/Directories.html">RailsApp::Directories</a>) = <span class="t">Array</span>(<span class="t">Directories</span>).new, annotations : Hash(String, JSON::Any) = {} <span class="k">of</span> <span class="t">String</span> <span class="o">=&gt;</span> <span class="t">JSON</span><span class="t">::</span><span class="t">Any</span>, entrypoints : Array(<a href="RailsApp/Entrypoints.html">RailsApp::Entrypoints</a>), before_create : <a href="RailsApp/BeforeCreate.html">RailsApp::BeforeCreate</a>, before_update : <a href="RailsApp/BeforeUpdate.html">RailsApp::BeforeUpdate</a>, service_account : Nil | String = <span class="n">nil</span>)
 
-        <a class="method-permalink" href="#new%28%2A%2Cimage%3AString%2Cimage_pull_policy%3ARailsApp%3A%3AImagePullPolicy%3D%22IfNotPresent%22%2Cimage_pull_secrets%3AArray%28String%29%3DArray%28String%29.new%2Cenv_from%3AArray%28RailsApp%3A%3AEnvFrom%29%3DArray%28EnvFrom%29.new%2Cenv%3AArray%28RailsApp%3A%3AEnv%29%3DArray%28Env%29.new%2Cnode_selector%3AHash%28String%2CJSON%3A%3AAny%29%3D%7B%7DofString%3D%3EJSON%3A%3AAny%2Cdirectories%3AArray%28RailsApp%3A%3ADirectories%29%3DArray%28Directories%29.new%2Cannotations%3AHash%28String%2CJSON%3A%3AAny%29%3D%7B%7DofString%3D%3EJSON%3A%3AAny%2Centrypoints%3AArray%28RailsApp%3A%3AEntrypoints%29%2Cbefore_create%3ARailsApp%3A%3ABeforeCreate%2Cbefore_update%3ARailsApp%3A%3ABeforeUpdate%2Cservice_account%3ANil%7CString%3Dnil%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28%2A%2Cimage%3AString%2Cimage_pull_policy%3AString%3D%22IfNotPresent%22%2Cimage_pull_secrets%3AArray%28String%29%3DArray%28String%29.new%2Cenv_from%3AArray%28RailsApp%3A%3AEnvFrom%29%3DArray%28EnvFrom%29.new%2Cenv%3AArray%28RailsApp%3A%3AEnv%29%3DArray%28Env%29.new%2Cnode_selector%3AHash%28String%2CJSON%3A%3AAny%29%3D%7B%7DofString%3D%3EJSON%3A%3AAny%2Cdirectories%3AArray%28RailsApp%3A%3ADirectories%29%3DArray%28Directories%29.new%2Cannotations%3AHash%28String%2CJSON%3A%3AAny%29%3D%7B%7DofString%3D%3EJSON%3A%3AAny%2Centrypoints%3AArray%28RailsApp%3A%3AEntrypoints%29%2Cbefore_create%3ARailsApp%3A%3ABeforeCreate%2Cbefore_update%3ARailsApp%3A%3ABeforeUpdate%2Cservice_account%3ANil%7CString%3Dnil%29-class-method">#</a>
       </div>
       
       <br/>
@@ -956,12 +946,12 @@ Either a <code>value</code> or <code>value_from</code> (in YAML: <code>valueFrom
       </div>
     </div>
   
-    <div class="entry-detail" id="image_pull_policy:ImagePullPolicy-instance-method">
+    <div class="entry-detail" id="image_pull_policy:String-instance-method">
       <div class="signature">
         
-        def <strong>image_pull_policy</strong> : <a href="RailsApp/ImagePullPolicy.html">ImagePullPolicy</a>
+        def <strong>image_pull_policy</strong> : String
 
-        <a class="method-permalink" href="#image_pull_policy%3AImagePullPolicy-instance-method">#</a>
+        <a class="method-permalink" href="#image_pull_policy%3AString-instance-method">#</a>
       </div>
       
         <div class="doc">
