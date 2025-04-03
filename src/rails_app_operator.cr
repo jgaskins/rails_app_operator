@@ -125,17 +125,15 @@ module Kubernetes
     kind: "PersistentVolumeClaim"
 end
 
-# Use this one in production
 k8s = Kubernetes::Client.new
 spawn do
   loop do
-    sleep 1.hour
+    sleep 5.minutes
     k8s = Kubernetes::Client.new
   end
 end
 
-resources = k8s.rails_apps(namespace: nil)
-version = resources.metadata.resource_version
+version = "0"
 
 spawn do
   loop do
