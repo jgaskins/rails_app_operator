@@ -133,11 +133,9 @@ spawn do
   end
 end
 
-version = "0"
-
 spawn do
   loop do
-    k8s.watch_jobs(labels: "app.kubernetes.io/managed-by=rails-app-operator") do |watch|
+    k8s.watch_jobs(labels: "app.kubernetes.io/managed-by=rails-app-operator", timeout: 1.minute) do |watch|
       job = watch.object
       next unless job.metadata.labels["rails_app"]?
 
@@ -163,9 +161,10 @@ spawn do
   end
 end
 
+version = "0"
 info "Watching Rails Apps"
 loop do
-  k8s.watch_rails_apps(resource_version: version) do |watch|
+  k8s.watch_rails_apps(resource_version: version, timeout: 1.minute) do |watch|
     info watch
     resource = watch.object
     rails_app = resource.spec
