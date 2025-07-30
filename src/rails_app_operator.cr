@@ -126,12 +126,6 @@ module Kubernetes
 end
 
 k8s = Kubernetes::Client.new
-spawn do
-  loop do
-    sleep 5.minutes
-    k8s = Kubernetes::Client.new
-  end
-end
 
 spawn do
   loop do
