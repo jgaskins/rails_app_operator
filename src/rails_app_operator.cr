@@ -128,174 +128,166 @@ end
 k8s = Kubernetes::Client.new
 
 spawn do
-  loop do
-    k8s.watch_jobs(labels: "app.kubernetes.io/managed-by=rails-app-operator", timeout: 1.minute) do |watch|
-      job = watch.object
-      next unless job.metadata.labels["rails_app"]?
+  k8s.watch_jobs(labels: "app.kubernetes.io/managed-by=rails-app-operator", timeout: 1.minute) do |watch|
+    job = watch.object
+    next unless job.metadata.labels["rails_app"]?
 
-      case watch.type
-      in .added?, .modified?
-        name = job.metadata.name.sub(/-before-(create|update)$/, "")
-        namespace = job.metadata.namespace
-        next unless resource = k8s.rails_app(name: name, namespace: namespace)
+    case watch.type
+    in .added?, .modified?
+      name = job.metadata.name.sub(/-before-(create|update)$/, "")
+      namespace = job.metadata.namespace
+      next unless resource = k8s.rails_app(name: name, namespace: namespace)
 
-        if job.status["completionTime"]? # Job is complete!
-          deploy(k8s, resource)
+      if job.status["completionTime"]? # Job is complete!
+        deploy(k8s, resource)
 
-          delete_job k8s, job
-        end
-      in .deleted?
-        delete_job_pods k8s, job
-      in .error?
-        LOG.error { watch.to_json }
+        delete_job k8s, job
       end
+    in .deleted?
+      delete_job_pods k8s, job
+    in .error?
+      LOG.error { watch.to_json }
     end
-  rescue ex
-    LOG.error(exception: ex) { "Error" }
   end
 end
 
 version = "0"
 info "Watching Rails Apps"
-loop do
-  k8s.watch_rails_apps(resource_version: version, timeout: 1.minute) do |watch|
-    info watch
-    resource = watch.object
-    rails_app = resource.spec
-    name = resource.metadata.name
-    namespace = resource.metadata.namespace
-    version = resource.metadata.resource_version
+k8s.watch_rails_apps(resource_version: version, timeout: 1.minute) do |watch|
+  info watch
+  resource = watch.object
+  rails_app = resource.spec
+  name = resource.metadata.name
+  namespace = resource.metadata.namespace
+  version = resource.metadata.resource_version
 
-    case watch
-    when .added?, .modified?
-      rails_app.directories.each do |dir|
-        if files = dir.files
-          info k8s.apply_configmap(
-            metadata: {
-              name:      "#{name}-#{dir.name}",
-              namespace: namespace,
-            },
-            data: files.each_with_object({} of String => String) { |file, hash|
-              hash[file.filename] = file.content
-            },
-            force: true,
-          )
-        elsif storage = dir.persistent_storage
-          info k8s.apply_persistentvolumeclaim(
-            metadata: {
-              namespace: namespace,
-              name:      "#{name}-#{dir.name}",
-              # Do we need to set this?
-              # finalizers: %w[
-              #   kubernetes.io/pv-protection
-              # ],
-            },
-            spec: {
-              accessModes:      storage.access_modes,
-              storageClassName: storage.storage_class,
-              resources:        {
-                requests: {
-                  storage: storage.size,
-                },
+  case watch
+  when .added?, .modified?
+    rails_app.directories.each do |dir|
+      if files = dir.files
+        info k8s.apply_configmap(
+          metadata: {
+            name:      "#{name}-#{dir.name}",
+            namespace: namespace,
+          },
+          data: files.each_with_object({} of String => String) { |file, hash|
+            hash[file.filename] = file.content
+          },
+          force: true,
+        )
+      elsif storage = dir.persistent_storage
+        info k8s.apply_persistentvolumeclaim(
+          metadata: {
+            namespace: namespace,
+            name:      "#{name}-#{dir.name}",
+            # Do we need to set this?
+            # finalizers: %w[
+            #   kubernetes.io/pv-protection
+            # ],
+          },
+          spec: {
+            accessModes:      storage.access_modes,
+            storageClassName: storage.storage_class,
+            resources:        {
+              requests: {
+                storage: storage.size,
               },
             },
-          )
-        end
-      end
-    when .deleted?
-      rails_app.directories.each do |dir|
-        dir_resource_name = "#{name}-#{dir.name}"
-        if dir.files
-          info k8s.delete_configmap(namespace: namespace, name: dir_resource_name)
-        elsif dir.persistent_storage
-          info k8s.delete_persistentvolumeclaim(namespace: namespace, name: dir_resource_name)
-        end
-      rescue ex
-        error ex
-        ex.backtrace?.try(&.each { |line| error line })
-        raise ex
+          },
+        )
       end
     end
-
-    # TODO: Extract the bodies of this into a single method
-    if watch.added? && resource.metadata.creation_timestamp > 1.minute.ago
-      labels = {
-        rails_app:                      name,
-        "app.kubernetes.io/managed-by": "rails-app-operator",
-        "app.kubernetes.io/component":  "before-create",
-      }
-      delete_job k8s, namespace: namespace, name: "#{name}-before-create"
-      delete_job k8s, namespace: namespace, name: "#{name}-before-update"
-      info k8s.apply_job(
-        metadata: {
-          name:      "#{name}-before-create",
-          namespace: namespace,
-          labels:    labels,
-        },
-        spec: {
-          template: {
-            metadata: {labels: labels},
-            spec:     pod_spec(
-              resource,
-              command: rails_app.before_create.command,
-              env: rails_app.before_create.env,
-              env_from: rails_app.before_create.env_from,
-              node_selector: rails_app.node_selector.merge(rails_app.before_create.node_selector),
-            ).merge({
-              restartPolicy: "OnFailure",
-            }),
-          },
-        },
-        force: true,
-      )
-    elsif watch.deleted?
-      # do nothing here
-    else # Updated or the K8s control plane telling us it's added but it's really just an update
-      labels = {
-        rails_app:                      name,
-        "app.kubernetes.io/managed-by": "rails-app-operator",
-        "app.kubernetes.io/component":  "before-update",
-      }
-      delete_job k8s, namespace: namespace, name: "#{name}-before-create"
-      delete_job k8s, namespace: namespace, name: "#{name}-before-update"
-      info k8s.apply_job(
-        metadata: {
-          name:      "#{name}-before-update",
-          namespace: namespace,
-          labels:    labels,
-        },
-        spec: {
-          template: {
-            metadata: {labels: labels},
-            spec:     pod_spec(
-              resource,
-              command: rails_app.before_update.command,
-              env: rails_app.before_update.env,
-              env_from: rails_app.before_update.env_from,
-              node_selector: rails_app.node_selector.merge(rails_app.before_update.node_selector),
-            ).merge({
-              restartPolicy: "OnFailure",
-            }),
-          },
-        },
-        force: true,
-      )
-    end
-
-    case watch
-    when .deleted?
-      rails_app.entrypoints.each do |entrypoint|
-        entrypoint_name = "#{name}-#{entrypoint.name}"
-        info k8s.delete_deployment name: entrypoint_name, namespace: namespace
-        info k8s.delete_service name: entrypoint_name, namespace: namespace
-        info k8s.delete_ingress name: entrypoint_name, namespace: namespace
+  when .deleted?
+    rails_app.directories.each do |dir|
+      dir_resource_name = "#{name}-#{dir.name}"
+      if dir.files
+        info k8s.delete_configmap(namespace: namespace, name: dir_resource_name)
+      elsif dir.persistent_storage
+        info k8s.delete_persistentvolumeclaim(namespace: namespace, name: dir_resource_name)
       end
-      info k8s.delete_job name: "#{name}-before-create", namespace: namespace
-      info k8s.delete_job name: "#{name}-before-update", namespace: namespace
+    rescue ex
+      error ex
+      ex.backtrace?.try(&.each { |line| error line })
+      raise ex
     end
   end
-rescue ex
-  LOG.error(exception: ex) { "Error" }
+
+  # TODO: Extract the bodies of this into a single method
+  if watch.added? && resource.metadata.creation_timestamp > 1.minute.ago
+    labels = {
+      rails_app:                      name,
+      "app.kubernetes.io/managed-by": "rails-app-operator",
+      "app.kubernetes.io/component":  "before-create",
+    }
+    delete_job k8s, namespace: namespace, name: "#{name}-before-create"
+    delete_job k8s, namespace: namespace, name: "#{name}-before-update"
+    info k8s.apply_job(
+      metadata: {
+        name:      "#{name}-before-create",
+        namespace: namespace,
+        labels:    labels,
+      },
+      spec: {
+        template: {
+          metadata: {labels: labels},
+          spec:     pod_spec(
+            resource,
+            command: rails_app.before_create.command,
+            env: rails_app.before_create.env,
+            env_from: rails_app.before_create.env_from,
+            node_selector: rails_app.node_selector.merge(rails_app.before_create.node_selector),
+          ).merge({
+            restartPolicy: "OnFailure",
+          }),
+        },
+      },
+      force: true,
+    )
+  elsif watch.deleted?
+    # do nothing here
+  else # Updated or the K8s control plane telling us it's added but it's really just an update
+    labels = {
+      rails_app:                      name,
+      "app.kubernetes.io/managed-by": "rails-app-operator",
+      "app.kubernetes.io/component":  "before-update",
+    }
+    delete_job k8s, namespace: namespace, name: "#{name}-before-create"
+    delete_job k8s, namespace: namespace, name: "#{name}-before-update"
+    info k8s.apply_job(
+      metadata: {
+        name:      "#{name}-before-update",
+        namespace: namespace,
+        labels:    labels,
+      },
+      spec: {
+        template: {
+          metadata: {labels: labels},
+          spec:     pod_spec(
+            resource,
+            command: rails_app.before_update.command,
+            env: rails_app.before_update.env,
+            env_from: rails_app.before_update.env_from,
+            node_selector: rails_app.node_selector.merge(rails_app.before_update.node_selector),
+          ).merge({
+            restartPolicy: "OnFailure",
+          }),
+        },
+      },
+      force: true,
+    )
+  end
+
+  case watch
+  when .deleted?
+    rails_app.entrypoints.each do |entrypoint|
+      entrypoint_name = "#{name}-#{entrypoint.name}"
+      info k8s.delete_deployment name: entrypoint_name, namespace: namespace
+      info k8s.delete_service name: entrypoint_name, namespace: namespace
+      info k8s.delete_ingress name: entrypoint_name, namespace: namespace
+    end
+    info k8s.delete_job name: "#{name}-before-create", namespace: namespace
+    info k8s.delete_job name: "#{name}-before-update", namespace: namespace
+  end
 end
 
 def deploy(k8s : Kubernetes::Client, resource : Kubernetes::Resource(RailsApp))
